@@ -184,3 +184,30 @@ function elChoose(cb, ...variants) {
 		});
 	});
 }
+
+function elInput(caption, cb) {
+	return elScene(api => {
+		// This function will change the scene after call to it
+		// Used to be in onclick event stuff
+		let applyChanges = () => {
+			// Emit value
+			cb(inp.value);
+			// Set new scene
+			api.change(api => api.append(elText(inp.value)))
+		}
+
+		// Events
+		let inp = el("input");
+		inp.addEventListener('keypress', e => {
+			if (e.key === 'Enter') {
+				applyChanges();
+				e.preventDefault();
+			}
+		});
+
+		// Elements
+		api.append(elText(caption))
+		api.append(inp);
+		api.append(elButton("OK", applyChanges));
+	});
+}

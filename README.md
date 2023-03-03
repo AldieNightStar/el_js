@@ -180,7 +180,8 @@ scene.api.stop() // Stop displaying that scene
 // ACcording to text we will do something
 elChoose((api, result) => {
     // Callback when we done the choice
-    // api - is the same as in Scene api (We can see it in the Scene api object)
+    // api    - is the same as in Scene api (We can see it in the Scene api object)
+    // result - will have a chosen value
     api.append(elText("We choosed: "))
     api.appendLn(elText(result))
 },
@@ -191,3 +192,7 @@ elChoose((api, result) => {
     ["Child", 8],
 );
 ```
+
+
+
+

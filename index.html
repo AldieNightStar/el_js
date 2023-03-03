@@ -6,15 +6,9 @@
 		window.addEventListener('load', () => {
 			let c = 0;
 			elto(document.body, elScene(api => {
-				api.appendLn(elChoose((api, result) => {
-					api.append(elText("We choosed: "))
-					api.appendLn(elText(result))
-				},
-					["Adult", 21],
-					["Young but Adult", 18],
-					["Young boy", 16],
-					["Child", 8],
-				))
+				api.append(elInput("Enter name: ", name => {
+					window.alert("Name is " + name)
+				}), "Ihor")
 			}));
 		});
 	</script>
