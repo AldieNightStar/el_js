@@ -24,7 +24,7 @@ let b = elButton(caption, onClick, cb)
 ```js
 // Create button which will replace with it's context when clicked
 // It will be replaced with scene
-let b = elButtonR(caption, api = {
+let b = elButtonR(caption, api => {
     // api - Same as in scene (Check out elScene element)
 })
 ```
@@ -177,7 +177,7 @@ scene.api.stop() // Stop displaying that scene
 ### Choice
 ```js
 // Will create set of buttons to choose
-// ACcording to text we will do something
+// According to text we will do something
 elChoose((api, result) => {
     // Callback when we done the choice
     // api    - is the same as in Scene api (We can see it in the Scene api object)
