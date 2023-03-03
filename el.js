@@ -57,7 +57,17 @@ function elTimer(intervalMs, ontick) {
 
 		// API
 		span.count = () => count;
-		span.stop = () => clearInterval(inum);
+		span.stop = () => {
+			clearInterval(inum);
+			span.parentElement.removeChild(span); // Remove itself
+		}
+	})
+}
+
+function elTimerOnce(intervalMs, ontimer) {
+	return elTimer(intervalMs, span => {
+		span.stop();
+		ontimer();
 	})
 }
 
@@ -136,6 +146,7 @@ function elScene(fn) {
 
 		// Clear the scene
 		api.clear = () => sceneSpan.innerHTML = "";
+
 		// Add element to the scene
 		api.append = el => elto(sceneSpan, el);
 		api.appendLn = el => { elto(sceneSpan, el); elto(sceneSpan, elNext()); }
@@ -146,6 +157,26 @@ function elScene(fn) {
 		// Adds a timer to the Scene
 		api.timer = (ms, timerCb) => api.append(elTimer(ms, timerCb));
 
-		fn(api);
+		// Return span element
+		api.span = () => sceneSpan
+
+		// Reload the scene
+		// Will clear under the hood
+		api.reload = () => {
+			api.clear();
+			fn(api);
+		}
+
+		// Change state function to another api call
+		api.change = fn2 => {
+			fn = fn2;
+			api.reload();
+		}
+
+		// Call to itself
+		api.reload();
+
+		// Export api
+		sceneSpan.api = api;
 	});
 }

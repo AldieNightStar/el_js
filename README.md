@@ -36,7 +36,9 @@ t.setText(text)
 // Create timer element
 // ontick - calls everytick
 // will stop if element is disconnected from DOM
-let t = elTimer(intervalMs, ontick)
+// elTimerOnce - used to make one-time timer
+let t = elTimer(intervalMs, ontimer)
+let t = elTimerOnce(intervalMs, ontimer)
 
 // Retunrs how many ticks were happen
 t.count()
@@ -85,13 +87,22 @@ let t = elSeqText(api => {
 })
 ```
 
+
+
 ### Scene Element
 ```js
 // Creates Scene Element
 // Allows to clear itself etc
-let s = elScene(api => {
+let scene = elScene(api => {
     // Clear the scene
+    // Will just destroy everything
     api.clear();
+
+    // Reload the scene (Will call the api again)
+    api.reload();
+
+    // Get span DOM object which scene is
+    api.span();
 
     // Add element without next line
     api.append(el(...));
@@ -102,10 +113,21 @@ let s = elScene(api => {
     // Will completely remove the scene
     api.stop();
 
+    // Change scene code to some another API call
+    // Will reload then call that function
+    // New function will replace old one
+    api.change(api => {
+        api.appendLn(elText("Hi there"))
+        api.clear();
+    })
+
     // Will add a timer to the scene
     // Timer will remain working until clear/stop
     let timer = api.timer(ms, callback);
     timer.stop(); // Stop the timer manually;
     timer.count(); // Get ticks done by timer counter
 })
+
+// Get the same api here
+scene.api
 ```
