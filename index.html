@@ -1,18 +1,27 @@
 <html>
-	<body>
-		<script type="application/javascript" src="el.js"></script>
-		<script type="text/javascript">
-			window.addEventListener('load', () => {
-				let c = 0;
-				elto(document.body, elScene(api => {
-					api.append(elText("This is "))
-					api.append(elButtonR("check", api => {
-						api.append(elText("Sigarette which is done long time ago"))
-					}))
-					api.appendLn(elText(". So now we can check this one."))
-					api.appendLn(elSeqText("One", "Two", "Three"))
-				}));
-			});
-		</script>
-	</body>
+
+<body>
+	<script type="application/javascript" src="el.js"></script>
+	<script type="text/javascript">
+		window.addEventListener('load', () => {
+			let c = 0;
+			elto(document.body, elScene(api => {
+				api.appendLn(elChoose((api, result) => {
+					api.append(elText("We choosed: "))
+					api.appendLn(elText(result))
+				},
+					["Adult", 21],
+					["Young but Adult", 18],
+					["Young boy", 16],
+					["Child", 8],
+				))
+			}));
+		});
+	</script>
+</body>
+
+<script type="eljs" id="d">
+		dsadsadsadsadsad
+	</script>
+
 </html>

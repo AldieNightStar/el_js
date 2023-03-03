@@ -169,3 +169,25 @@ let scene = elSeqText(
 scene.api.next() // Set scene to the next text sequence
 scene.api.stop() // Stop displaying that scene
 ```
+
+
+
+
+
+### Choice
+```js
+// Will create set of buttons to choose
+// ACcording to text we will do something
+elChoose((api, result) => {
+    // Callback when we done the choice
+    // api - is the same as in Scene api (We can see it in the Scene api object)
+    api.append(elText("We choosed: "))
+    api.appendLn(elText(result))
+},
+    // Our variants to choose
+    ["Adult", 21],
+    ["Young but Adult", 18],
+    ["Young boy", 16],
+    ["Child", 8],
+);
+```

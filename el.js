@@ -173,3 +173,14 @@ function elSeqText(...texts) {
 	})
 	return elSeq(...scenes)
 }
+
+function elChoose(cb, ...variants) {
+	return elScene(api => {
+		// Add each element to a scene
+		variants.forEach(variant => {
+			api.append(elButton(variant[0], () => {
+				api.change(api => cb(api, variant[1]));
+			}));
+		});
+	});
+}
