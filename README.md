@@ -20,6 +20,17 @@ let b = elButton(caption, onClick, cb)
 
 
 
+### Self Replaceable Button
+```js
+// Create button which will replace with it's context when clicked
+// It will be replaced with scene
+let b = elButtonR(caption, api = {
+    // api - Same as in scene (Check out elScene element)
+})
+```
+
+
+
 ### Text Label
 ```js
 // Create text element

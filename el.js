@@ -29,6 +29,14 @@ function elButton(caption, onClick, cb) {
 	});
 }
 
+function elButtonR(caption, sceneFn) {
+	return elScene(api => {
+		api.append(elButton(caption, () => {
+			api.change(sceneFn)
+		}))
+	})
+}
+
 function elText(text, cb) {
 	return el("span", t => {
 		t.innerText = text;
