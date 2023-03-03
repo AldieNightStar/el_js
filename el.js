@@ -190,6 +190,8 @@ function elInput(caption, cb) {
 		// This function will change the scene after call to it
 		// Used to be in onclick event stuff
 		let applyChanges = () => {
+			// Do nothing when empty
+			if (inp.value.length < 1) return;
 			// Emit value
 			cb(inp.value);
 			// Set new scene
