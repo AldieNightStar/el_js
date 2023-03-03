@@ -52,7 +52,7 @@ function elTimer(intervalMs, ontick) {
 	return el("span", span => {
 		let count = 0;
 		let inum = 0;
-		
+
 		// Interval
 		inum = setInterval(() => {
 			count += 1;
@@ -84,7 +84,7 @@ function elPrefixed(prefixText, t) {
 		// API
 		// set number
 		e.setNum = (n) => e.innerText = prefixText + n
-		
+
 		// self call
 		e.setText(t);
 	})
@@ -102,7 +102,7 @@ function elPrefixMultext(prefix, character, num) {
 		// API
 		// set number
 		e.setNum = (n) => e.innerText = prefix + mul(character, n)
-		
+
 		// self call
 		e.setNum(num);
 	})
@@ -211,5 +211,36 @@ function elInput(caption, cb) {
 		api.append(elText(caption))
 		api.append(inp);
 		api.append(elButton("OK", applyChanges));
+	});
+}
+
+
+// Makes element so user can reorder values on his own
+function elOrder(cb, ...elems) {
+	return elScene(api => {
+		let swap = (id1, id2) => {
+			let tmp = elems[id1];
+			elems[id1] = elems[id2];
+			elems[id2] = tmp;
+		}
+		for (let i = 0; i < elems.length; i++) {
+			let elem = elems[i];
+			let currentId = i;
+			if (currentId !== 0) {
+				api.append(elButton("^", () => {
+					swap(currentId, currentId - 1);
+					cb(elems);
+					api.reload();
+				}));
+			}
+			if (currentId !== elems.length - 1) {
+				api.append(elButton("v", () => {
+					swap(currentId, currentId + 1);
+					cb(elems);
+					api.reload();
+				}));
+			}
+			api.appendLn(elem);
+		}
 	});
 }

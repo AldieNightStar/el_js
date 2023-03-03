@@ -204,3 +204,23 @@ let inp = elInput("Enter your name", name => {
 })
 ```
 
+
+
+### Order of Elements
+```js
+// Allows user to manage order of each element
+elOrder(elements => {
+    // Will call on any change in order
+    // elements - list of elements to work with
+},
+    // Elements to put into for ordering
+    elText("Alpha"),
+    elText("Beta"),
+    elText("Gamma"),
+    elText("Delta"),
+    elText("Omega")
+)
+
+// Short usage of this method is
+elOrder(cb, ...elements)
+```
