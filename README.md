@@ -196,3 +196,11 @@ elChoose((api, result) => {
 
 
 
+### Input Element
+```js
+// Component which allows you to write the some text and wait to be changed
+let inp = elInput("Enter your name", name => {
+    window.alert("Your name is " + name);
+})
+```
+
