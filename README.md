@@ -75,20 +75,6 @@ t.setNum(10)
 
 
 
-### Sequence Text Element
-```js
-// Creates Sequence of texts
-let t = elSeqText(api => {
-    api.then("First line")
-    api.then("Second line")
-    api.then("Third line")
-    api.then("Final line")
-    api.nextButton(elButton("Next")) // Do not forget to set next button
-})
-```
-
-
-
 ### Scene Element
 ```js
 // Creates Scene Element
@@ -130,4 +116,45 @@ let scene = elScene(api => {
 
 // Get the same api here
 scene.api
+```
+
+
+
+
+### Sequence of Scenes
+```js
+// Create sequental scenes
+// To switch to the next, use:           api.next()
+// To check that this is the last one:   api.isLast()
+let scene = elSeq(
+    api => {
+        api.appendLn(elText("This is how i go!"))
+        api.appendLn(elButton("Next >>", api.next))
+        // api.next() - will switch scene to the next one
+    },
+    api => {
+        api.appendLn(elText("The new world"))
+        api.appendLn(elButton("Next >>", api.next))
+        // api.next() - will switch scene to the next one
+    },
+    api => {
+        api.appendLn(elText("This is all"))
+    }
+)
+scene.api.stop() // Stops the scene to display
+```
+
+
+
+
+### Sequence of Texts
+```js
+let scene = elSeqText(
+    "This is the world",
+    "We are here",
+    "Now all set",
+    "Done"
+)
+scene.api.next() // Set scene to the next text sequence
+scene.api.stop() // Stop displaying that scene
 ```

@@ -4,25 +4,7 @@
 		<script type="text/javascript">
 			window.addEventListener('load', () => {
 				let c = 0;
-				elto(document.body, elScene(api => {
-					c++;
-					api.appendLn(elButton("Say hi", () => window.alert("Hi!")));
-					api.appendLn(elButton("Reload", () => api.reload()));
-					for (let i = 0; i < c; i++) {
-						api.append(elText("dsadsa"))
-						if (i%10 == 0) {
-							api.append(elNext())
-						}
-					}
-					api.appendLn(elButton("Change forever", () => {
-						api.change(api => {
-							api.appendLn(elText("Here i am :)"));
-						})
-					}))
-					api.timer(500, () => {
-						console.log("Heartbeat " + c);
-					});
-				}))
+				elto(document.body, elSeqText("This is the world", "We are here", "Now all set", "Done"));
 			});
 		</script>
 	</body>

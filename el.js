@@ -100,45 +100,6 @@ function elPrefixMultext(prefix, character, num) {
 	})
 }
 
-/* Create Sequence of texts when pushing the button 'Next' */
-function elSeqText(fn) {
-	let api = {};
-	let buttonEl = null;
-	let q = [];
-	// API for build
-	api.then = t => q.push(t);
-	api.nextButton = b => {
-		buttonEl = b;
-	}
-
-	return el("span", span => {
-		// Call user defined api
-		fn(api);
-
-		// Add sub text
-		elto(span, el("span", span2 => {
-			// API for display
-			span2.popText = () => {
-				span2.innerText = q.splice(0, 1);
-				// Remove button when list is empty
-				if (q.length < 1) buttonEl.parentElement.removeChild(buttonEl);
-			}
-
-			// Prepare button for click actions
-			buttonEl.onclick = () => span2.popText();
-
-			// self call
-			span2.popText();
-		}))
-
-		// Add button element
-		if (buttonEl) {
-			elto(span, elNext());
-			elto(span, buttonEl);
-		}
-	})
-}
-
 function elScene(fn) {
 	return el("span", sceneSpan => {
 		// API
@@ -179,4 +140,28 @@ function elScene(fn) {
 		// Export api
 		sceneSpan.api = api;
 	});
+}
+
+function elSeq(...scenes) {
+	let sceneId = 0;
+	return elScene(api => {
+		api.next = () => {
+			sceneId += 1;
+			if (sceneId >= scenes.length) return
+			api.reload();
+		}
+		api.isLast = () => {
+			return (sceneId + 1) >= scenes.length
+		}
+		if (sceneId >= scenes.length) return
+		scenes[sceneId](api);
+	})
+}
+
+function elSeqText(...texts) {
+	let scenes = texts.map(t => api => {
+		api.appendLn(elText(t))
+		if (!api.isLast()) api.appendLn(elButton(">>", api.next))
+	})
+	return elSeq(...scenes)
 }
