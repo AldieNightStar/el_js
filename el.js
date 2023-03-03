@@ -16,9 +16,9 @@ const elNext = () => el("br");
 function elto(src, el) {
 	if (src.appendChild) {
 		src.appendChild(el);
-		return true;
+		return el;
 	}
-	return false;
+	return null;
 }
 
 function elButton(caption, onClick, cb) {
@@ -127,4 +127,25 @@ function elSeqText(fn) {
 			elto(span, buttonEl);
 		}
 	})
+}
+
+function elScene(fn) {
+	return el("span", sceneSpan => {
+		// API
+		let api = {};
+
+		// Clear the scene
+		api.clear = () => sceneSpan.innerHTML = "";
+		// Add element to the scene
+		api.append = el => elto(sceneSpan, el);
+		api.appendLn = el => { elto(sceneSpan, el); elto(sceneSpan, elNext()); }
+
+		// Remove this scene
+		api.stop = () => sceneSpan.parentElement.removeChild(sceneSpan);
+
+		// Adds a timer to the Scene
+		api.timer = (ms, timerCb) => api.append(elTimer(ms, timerCb));
+
+		fn(api);
+	});
 }

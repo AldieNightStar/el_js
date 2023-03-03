@@ -1,11 +1,14 @@
 <html>
 	<body>
-		Hello There
 		<script type="application/javascript" src="el.js"></script>
 		<script type="text/javascript">
 			window.addEventListener('load', () => {
-				elto(document.body, elTimer(100, t => {
-					
+				elto(document.body, elScene(api => {
+					api.appendLn(elButton("Say hi", () => window.alert("Hi!")));
+					api.appendLn(elButton("Clear", () => api.clear()));
+					api.timer(500, () => {
+						console.log("Heartbeat");
+					});
 				}))
 			});
 		</script>

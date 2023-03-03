@@ -84,3 +84,28 @@ let t = elSeqText(api => {
     api.nextButton(elButton("Next")) // Do not forget to set next button
 })
 ```
+
+### Scene Element
+```js
+// Creates Scene Element
+// Allows to clear itself etc
+let s = elScene(api => {
+    // Clear the scene
+    api.clear();
+
+    // Add element without next line
+    api.append(el(...));
+
+    // Add element with next line
+    api.appendLn(el(...));
+
+    // Will completely remove the scene
+    api.stop();
+
+    // Will add a timer to the scene
+    // Timer will remain working until clear/stop
+    let timer = api.timer(ms, callback);
+    timer.stop(); // Stop the timer manually;
+    timer.count(); // Get ticks done by timer counter
+})
+```
