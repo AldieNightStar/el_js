@@ -266,3 +266,17 @@ function elCollapse(caption, fn) {
 		}
 	})
 }
+
+function elCountDown(count, ms, cb) {
+	return elScene(api => {
+		api.append(elText(count));
+		if (count < 1) {
+			return;
+		}
+		api.timer(ms, () => {
+			count -= 1;
+			cb(count);
+			api.reload();
+		});
+	})
+}

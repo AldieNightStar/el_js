@@ -4,17 +4,12 @@
 	<script type="application/javascript" src="el.js"></script>
 	<script type="text/javascript">
 		window.addEventListener('load', () => {
-			let c = 0;
 			elto(document.body, elScene(api => {
 
 				// Logic
-				let el = elCollapse("Book", api => {
-					for (let i = 0; i < 12; i++) {
-						api.appendLn(elText("[" + i + "]"));
-					}
-				});
-
-
+				let el = elCountDown(5, 1000, t => {
+					console.log(t)
+				})
 
 				api.appendLn(el);
 			}));
