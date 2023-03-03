@@ -56,6 +56,12 @@ t.count()
 
 // Stops the timer
 t.stop()
+
+// Sample
+elTimer(500, t => {
+    // Stop when ticks is more than 25
+    if (t.count() > 25) t.stop()
+})
 ```
 
 
