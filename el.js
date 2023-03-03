@@ -1,63 +1,3 @@
-/*
-	EL.JS
-	by HaxiDenti
-	=========================
-
-	* You can create elements with: el(tag, cb)
-	* You can add them to existing elements with: elto(elem, el(...))
-	* You can use predefined components like: elButton("Caption", onclick, cb)
-
-	* cb - means that this will call after blank element creation. So all the parameters you make yourself
-
-	* Defined components:
-
-	-- Button
-	---------------------
-		// Create button element with onClick stuff
-		// and optional 'cb' to add additional elements
-		let b = elButton(caption, onClick, cb)
-
-	-- Text Label
-	---------------------
-		// Create text element
-		let t = elText(text, cb);
-
-		// Set new text to it
-		t.setText(text)
-
-	-- Timer Element
-	---------------------
-		// Create timer element
-		// ontick - calls everytick
-		// will stop if element is disconnected from DOM
-		let t = elTimer(intervalMs, ontick)
-
-		// Retunrs how many ticks were happen
-		t.count()
-
-		// Stops the timer
-		t.stop()
-
-	-- Prefixed Text element
-	-------------------------
-		// Created prefixed text/number
-		let t = elPrefixed("Life: ", 32)
-
-		// Update text (Prefix will leave as is)
-		t.setText(t);
-
-	-- Multitext Element
-	-------------------------
-		// Creates multiplied text according to a given number
-		// prefix    - used to prefix the multitext
-		// character - used to be multiplied by 'num'
-		let t = elPrefixMultext(prefix, character, num)
-
-		// Remultiply text. Change count of symbols
-		t.setNum(10)
-*/
-
-
 /* Fundamental function
    It has name for the tag
    It has callback for the manipulation etc */
@@ -151,7 +91,7 @@ function elPrefixMultext(prefix, character, num) {
 }
 
 /* Create Sequence of texts when pushing the button 'Next' */
-function elSeq(fn) {
+function elSeqText(fn) {
 	let api = {};
 	let buttonEl = null;
 	let q = [];
