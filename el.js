@@ -226,21 +226,43 @@ function elOrder(cb, ...elems) {
 		for (let i = 0; i < elems.length; i++) {
 			let elem = elems[i];
 			let currentId = i;
-			if (currentId !== 0) {
-				api.append(elButton("^", () => {
-					swap(currentId, currentId - 1);
-					cb(elems);
-					api.reload();
-				}));
-			}
-			if (currentId !== elems.length - 1) {
-				api.append(elButton("v", () => {
-					swap(currentId, currentId + 1);
-					cb(elems);
-					api.reload();
-				}));
-			}
+			api.append(elButton("^", () => {
+				if (currentId === 0) return;
+				swap(currentId, currentId - 1);
+				cb(elems);
+				api.reload();
+			}));
+			api.append(elButton("v", () => {
+				if (currentId === elems.length - 1) return;
+				swap(currentId, currentId + 1);
+				cb(elems);
+				api.reload();
+			}));
 			api.appendLn(elem);
 		}
 	});
+}
+
+// Collapser scene
+function elCollapse(caption, fn) {
+	let collapse = true;
+	let collapseToggle = () => { collapse = !collapse }
+
+	return elScene(api => {
+		let span = api.span();
+
+		span.isCollapsed = () => collapse;
+
+		span.toggle = () => {
+			collapseToggle();
+			api.reload();
+		}
+
+		if (span.isCollapsed()) {
+			api.append(elButton("[ + ] " + caption, span.toggle))
+		} else {
+			api.append(elButton("[ - ] " + caption, span.toggle))
+			fn(api);
+		}
+	})
 }

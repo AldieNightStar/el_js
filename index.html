@@ -8,18 +8,15 @@
 			elto(document.body, elScene(api => {
 
 				// Logic
-				api.appendLn(elOrder(els => {
-					console.log(els.map(e => e.innerHTML));
-				},
-					elText("Alpha"),
-					elText("Beta"),
-					elText("Gamma"),
-					elText("Delta"),
-					elText("Omega")
-				));
+				let el = elCollapse("Book", api => {
+					for (let i = 0; i < 12; i++) {
+						api.appendLn(elText("[" + i + "]"));
+					}
+				});
 
 
 
+				api.appendLn(el);
 			}));
 		});
 	</script>

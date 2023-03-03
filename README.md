@@ -46,7 +46,7 @@ t.setText(text)
 ```js
 // Create timer element
 // ontick - calls everytick
-// will stop if element is disconnected from DOM
+// will stop if element is disconnected from the DOM
 // elTimerOnce - used to make one-time timer
 let t = elTimer(intervalMs, ontimer)
 let t = elTimerOnce(intervalMs, ontimer)
@@ -223,4 +223,14 @@ elOrder(elements => {
 
 // Short usage of this method is
 elOrder(cb, ...elements)
+```
+
+
+### Collapser
+```js
+// Will add scene with ability to collapse
+// When collapsed - all elements are removed
+let c = elCollapse("Items", api => {
+    // api - same as in Scene element
+})
 ```
