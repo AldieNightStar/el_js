@@ -9,7 +9,26 @@
 # Defined elements
 ---
 
+### Element
+```js
+// Creates element from scratch
+let e = el("span", span => {
+    span.innerHTML = "Hello!";
+})
 
+// It has also additional functional helpers
+//
+// elements allowing 'then' chain function calls
+// It allows to add a lot of callbacks to the element
+// And it will still return previous element
+el("span")
+    .then(elInner("Hello!"))      // elInner - changes innerHTML
+    .then(elStyle("width: 32px")) // elStyle - set's style parameters
+    .then(elClass("class"))       // elClass - set's the class
+    .then(elId("id"))             // elId    - set's the id
+    .then(elSet("test", 123))     // elSet   - set provided parameter
+    .then(span => { /* ... */ })  // also you can use your own callbacks
+```
 
 ### Button
 ```js

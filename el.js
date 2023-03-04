@@ -4,6 +4,8 @@
 function el(tag, cb) {
 	let e = document.createElement(tag);
 	if (cb) cb(e);
+	// Additional GLOBAL el API
+	e.then = cb2 => cb2(e);
 	return e;
 }
 
@@ -20,6 +22,25 @@ function elto(src, el) {
 	}
 	return null;
 }
+
+// ============================
+// Functional helpers for cb's
+// ============================
+
+function elSet(name, val) {
+	return (el) => {
+		el[name] = val;
+	}
+}
+
+function elId(id) { return (el) => el.id = id; }
+function elClass(c) { return (el) => el.className = c; }
+function elStyle(name, val) { return (el) => el.style[name] = val; }
+function elInner(val) { return (el) => el.innerHTML = val; }
+
+// ============================
+// Predefined elements
+// ============================
 
 function elButton(caption, onClick, cb) {
 	return el('button', b => {
