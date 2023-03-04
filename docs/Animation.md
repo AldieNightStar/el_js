@@ -17,8 +17,8 @@ let ani = elAnimation(ani => {
     //     frames    - maximum frames in the new line
     //     callback  - callback for new line API
     ani.newLine(frames, line => {
-        // Add interpolation (tween-like) animation. Between frame stuff
-        //     from_frame, to_freame     - used to indicate range in frames (from->to)
+        // Add interpolation (tween-like) animation. Between frames
+        //     from_frame, to_frame      - used to indicate range in frames (from->to)
         //     from_val,   to_val        - used to specify numbers to interpolate between frames
         //     callback(frame, value)    - Callback
         //         frame                 - Current frame
