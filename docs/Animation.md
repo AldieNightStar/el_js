@@ -9,6 +9,7 @@
 ```js
 // Returns timer with animation executor
 // Allows to create animations on the fly
+// Runs while it's connected to DOM
 let ani = elAnimation(ani => {
     // Create animation timeline
     // Receives:
@@ -65,6 +66,7 @@ let ani = elAnimation(ani => {
 });
 
 // Terminate all the animation and Timer
+// Will also remove the 'span' it creates
 ani.stop();
 ```
 
