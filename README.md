@@ -271,7 +271,15 @@ c.api.stop();
 ```js
 // Create storage memory for the elements
 // Each storage should have it's own namespace. For example "mystore"
-// provider - is a function which provide connection to a memory (Optional. By Default: () => sessionStorage)
+// provider - is a function which provide connection to a memory. By Default: () => sessionStorage
+//     providers:
+//         elStorage.SESSION   - used for sessionStorage connection
+//         elStorage.LOCAL     - used for localStorage connection
+//         elStorage.CACHE     - used for temporary (lossy on refresh) connection
+//     custom provider:
+//         just create function which returns object with functions:
+//             setItem(name, value)
+//             getItem(name)
 let store = elStorage("mystore", provider);
 
 // Set items by name

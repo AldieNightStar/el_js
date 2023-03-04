@@ -305,4 +305,14 @@ function elCountDown(count, ms, cb) {
 		})
 	}
 	window.elStorage = elStorage;
+
+	elStorage.LOCAL = () => localStorage
+	elStorage.SESSION = () => sessionStorage
+	elStorage.CACHE = () => {
+		let dat = {}
+		return {
+			getItem(name) { return dat[name]; },
+			setItem(name, val) { dat[name] = val; }
+		}
+	}
 })()
