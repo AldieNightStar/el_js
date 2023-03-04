@@ -124,7 +124,8 @@ player.ended
 ### Animation Interpol Builder
 * `line` has method `with(callback)` which creates builder.
 * This one could be used for better animation coding.
-* `animate()` is an animation step. This time `to(...)` values becomes `from(...)` values for future animations
+* `animate()` is an animation step. This time `to(...)` values becomes `from(...)` values
+* Also don't forget that `from(...)` values should have same length with `to(...)` values
 ```js
 line.with((x, y) => player.setXY(x, y))
     .on(1, 10) // Set frames from 1 to 10 (inclusive)
@@ -137,5 +138,11 @@ line.with((x, y) => player.setXY(x, y))
     .next(5).from(100, 100).to(0, 0).animate()
     .next(5).from(100, 100).to(200, 200).animate()
     .next(5).from(200, 200).to(100, 100).animate() // and so forth
+
+    // We can also add static function on specific frame it will use only fromFrame variable inside,
+    //   so it can be combined with values above
+    line.with(action).on(1).func(() => jump())
+        .next(1).func(() => duck())
+        .next(5).func(() => stop()); // etc
 
 ```

@@ -406,6 +406,7 @@ class ElInterpolBuilder {
 	}
 	on(from, to) {
 		this.frame_from = from;
+		if (to === undefined) to = from + 1
 		this.frame_to = to;
 		return this;
 	}
@@ -424,6 +425,10 @@ class ElInterpolBuilder {
 	next(frameCount) {
 		this.frame_from = this.frame_to;
 		this.frame_to = this.frame_from + frameCount;
+		return this;
+	}
+	func(func) {
+		this.line.addFunction(this.frame_from, func);
 		return this;
 	}
 	animate() {
