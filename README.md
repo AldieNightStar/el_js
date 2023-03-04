@@ -274,26 +274,35 @@ let inp = elInput("Enter your name", name => {
 })
 ```
 
-
+### List of Elements
+```js
+// Renders list of elements converted from list of values
+// Accepts:
+//     values   - list of values (not elements)
+//     renderer - function(id, val) -> element
+//         it accepts id and value from list
+//         and should return element for this value
+elList(
+    ["Aldie", "Richard", "Tiffie", "Timmy", "Nimferia"],
+    (id, val) => elText(val)
+);
+```
 
 ### Order of Elements
 ```js
 // Allows user to manage order of each element
-// Will not be saved during reload. Need to know it
-elOrder(elements => {
-    // Will call on any change in order
-    // elements - list of elements to work with
-},
-    // Elements to put into for ordering
-    elText("Alpha"),
-    elText("Beta"),
-    elText("Gamma"),
-    elText("Delta"),
-    elText("Omega")
-)
-
-// Short usage of this method is
-elOrder(cb, ...elements)
+// Accepts:
+//     values   - list of values (not elements)
+//     renderer - function(id, value) -> element
+//         it accepts id and value from list
+//         and should return element for this value
+//     callback - function which calls everytime order is changed
+//         accepts list of values (not elements)
+elOrder(
+    ["Alpha", "Beta", "Gamma", "Omega"],
+    (id, val) => elText(val),
+    elems => console.log(elems)
+);
 ```
 
 

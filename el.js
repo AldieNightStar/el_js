@@ -236,33 +236,47 @@ function elInput(caption, cb) {
 	});
 }
 
-
-// Makes element so user can reorder values on his own
-function elOrder(cb, ...elems) {
+// Renders list elements by renderer
+// renderer - function fn(id, val) -> element
+//     accepts id and value from list
+//     returns element to be added to DOM
+function elList(values, renderer) {
 	return elScene(api => {
-		let swap = (id1, id2) => {
-			let tmp = elems[id1];
-			elems[id1] = elems[id2];
-			elems[id2] = tmp;
-		}
-		for (let i = 0; i < elems.length; i++) {
-			let elem = elems[i];
-			let currentId = i;
-			api.append(elButton("^", () => {
-				if (currentId === 0) return;
-				swap(currentId, currentId - 1);
-				cb(elems);
-				api.reload();
-			}));
-			api.append(elButton("v", () => {
-				if (currentId === elems.length - 1) return;
-				swap(currentId, currentId + 1);
-				cb(elems);
-				api.reload();
-			}));
-			api.appendLn(elem);
+		for (let i = 0; i < values.length; i++) {
+			api.appendLn(renderer(i, values[i]));
 		}
 	});
+}
+
+// Makes element so user can reorder values on his own
+// [!!] Changes list elements
+function elOrder(values, renderer, cb) {
+	let swap = (id1, id2) => {
+		let tmp = values[id1];
+		values[id1] = values[id2];
+		values[id2] = tmp;
+		cb(values);
+	}
+	let list = elList(
+		values,
+		(id, val) => el("span", span => { // custom renderer that support ordering
+			// When button is pressed and order is changed we can update list by .api.reload()
+			if (id !== 0) {
+				elto(span, elButton("^", () => {
+					swap(id, id - 1);
+					list.api.reload();
+				}));
+			}
+			elto(span, renderer(id, val));
+			if (id !== values.length - 1) {
+				elto(span, elButton("v", () => {
+					swap(id, id + 1);
+					list.api.reload();
+				}));
+			}
+		})
+	);
+	return list;
 }
 
 // Collapser scene
@@ -303,7 +317,7 @@ function elCountDown(count, ms, cb) {
 	})
 }
 
-(function() {
+(function () {
 	class Variable {
 		constructor(getter, setter) {
 			this.getter = getter;

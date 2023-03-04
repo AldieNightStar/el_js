@@ -1,6 +1,5 @@
 <html>
 	<head>
-		<link rel="stylesheet" href="styles.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta charset="UTF-8">
 	</head>
@@ -8,13 +7,26 @@
 	<script type="application/javascript" src="el.js"></script>
 	<script type="text/javascript">
 		window.addEventListener('load', () => {
-			elto(document.body, elScene(api => {
+			// Storage
+			window.store = elStorage("store");
+			// Named scene for global state
+			elto(document.body, elNamedScenes(store.variable("mainScene"), {
+				main: api => {
+					
+					api.appendLn(elOrder(
+						["Alpha", "Beta", "Gamma", "Omega"],
+						(id, val) => elText(val),
+						console.log
+					));
 
-				// LOGIC
-				let store = api.append(elStorage("store"));
+					api.appendLn(el("hr"));
 
-				
 
+					api.appendLn(elList(
+						["Aldie", "Richard", "Tiffie", "Timmy", "Nimferia"],
+						(id, val) => elText("Name [" + val + "]")
+					));
+				}
 			}));
 		});
 	</script>
