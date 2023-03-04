@@ -120,8 +120,7 @@ let scene = elScene(api => {
     // Will reload then call that function
     // New function will replace old one
     api.change(api => {
-        api.appendLn(elText("Hi there"))
-        api.clear();
+        api.appendLn(elText("Hi there"));
     })
 
     // Will add a timer to the scene
@@ -133,6 +132,34 @@ let scene = elScene(api => {
 
 // Get the same api here
 scene.api
+```
+
+
+### Named Scenes
+```js
+// Create named scenes from storageVariable
+//     storageVariable could be get from elStorage
+//     for example:   storage.variable("name")
+// Works as simple scenes
+// BUT has differences in API
+// First scene name is "main"
+let scene = elNamedScenes(nameVar, {
+    main: api => {
+        // API mostly the same as Scene API
+        // Differences:
+        
+        // Change scene to another (by name)
+        // Here we provide name (not a function)
+        api.change("scene1");
+
+        // Reload will work by getting name
+        //   from variable and then resolve
+        //   which scene need to load
+        api.reload();
+    },
+    scene1: api => {},
+    scene2: api => {}
+});
 ```
 
 
@@ -292,6 +319,7 @@ store.get('a');
 let v = store.variable('a')
 v.set(123);
 v.get();
+v.isNull(); // Returns true if variable is null or undefined
 ```
 
 

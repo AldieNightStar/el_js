@@ -293,6 +293,10 @@ function elCountDown(count, ms, cb) {
 		set(val) {
 			return this.setter(val)
 		}
+		isNull() {
+			let val = this.get();
+			return val === null || val === undefined
+		}
 	}
 
 	function elStorage(section, provider) {
@@ -328,4 +332,27 @@ function elEvent() {
 		}
 		el.clear = funcs = [];
 	});
+}
+
+function elNamedScenes(nameVariable, scenesObj) {
+	return elScene(api => {
+		if (nameVariable.isNull()) {
+			nameVariable.set("main");
+		}
+		api.reload = () => {
+			api.clear();
+			let name = nameVariable.get();
+			let scene = scenesObj[name]
+			if (scene) {
+				scene(api);
+			} else {
+				api.appendLn(elText("[!!] Can't find scene: " + name));
+			}
+		}
+		api.change = name => {
+			nameVariable.set(name);
+			api.reload();
+		}
+		api.change(nameVariable.get())
+	})
 }

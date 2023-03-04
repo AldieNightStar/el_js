@@ -4,20 +4,44 @@
 	<script type="application/javascript" src="el.js"></script>
 	<script type="text/javascript">
 		window.addEventListener('load', () => {
+			function gotoButton(api, name) {
+				return elButton("Go to " + name, () => api.change(name));
+			}
+
+			function g1(api) {
+				api.appendLn(elText("This is a test for First G ONE"));
+				api.appendLn(gotoButton(api, "g1"));
+				api.appendLn(gotoButton(api, "g2"));
+				api.appendLn(gotoButton(api, "g3"));
+			}
+
+			function g2(api) {
+				api.appendLn(elText("This is a test for Second G TWO"));
+				api.appendLn(gotoButton(api, "g1"));
+				api.appendLn(gotoButton(api, "g2"));
+				api.appendLn(gotoButton(api, "g3"));
+			}
+
+			function g3(api) {
+				api.appendLn(elText("This is a test for Third G THREE	"));
+				api.appendLn(gotoButton(api, "g1"));
+				api.appendLn(gotoButton(api, "g2"));
+				api.appendLn(gotoButton(api, "g3"));
+			}
+
 			elto(document.body, elScene(api => {
-				// Logic
-				let event = api.append(elEvent());
-				let cnt = 0;
 
-				// Button to activate the event
-				api.appendLn(elButton("Push me", () => event.emit("Pushed button " + (cnt++))));
+				// LOGIC
+				let store = api.append(elStorage("store"));
 
-				api.appendLn(elText("text", el => {
-					event.connect(d => {
-						el.innerHTML = d;
-						return el.isConnected;
-					})
-				}))
+				api.append(elNamedScenes(store.variable("name"), {
+					main: g1,
+					g1: g1,
+					g2: g2,
+					g3: g3
+				}));
+
+
 			}));
 		});
 	</script>
