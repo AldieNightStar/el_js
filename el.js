@@ -6,6 +6,7 @@ function el(tag, cb) {
 	if (cb) cb(e);
 	// Additional GLOBAL el API
 	e.then = cb2 => cb2(e);
+	e.delete = () => e.parentElement.removeChild(e);
 	return e;
 }
 

@@ -28,6 +28,12 @@ el("span")
     .then(elId("id"))             // elId    - set's the id
     .then(elSet("test", 123))     // elSet   - set provided parameter
     .then(span => { /* ... */ })  // also you can use your own callbacks
+
+// Additional API
+// ==============
+
+// Will delete the element
+e.delete();
 ```
 
 ### Button
