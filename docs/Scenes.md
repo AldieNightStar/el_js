@@ -76,7 +76,7 @@ let scene = elNamedScenes(nameVar, {
 ### Sequence of Scenes
 ```js
 // Create sequental scenes
-// Uses countVar (elStorage Variable) to remember the position
+// Uses countVar (ElVariable) to remember the position
 //     Can be taken from elStorage
 //     For example:   storage.variable("seq_1")
 // To switch to the next, use:           api.next()
@@ -109,7 +109,7 @@ scene.api.stop() // Stops the scene to display
 ```js
 // Creates sequental text scenes
 // Used only for long stories with 'next'-button based interactivity
-// Uses countVar (elStorage Variable) to remember the position
+// Uses countVar (ElVariable) to remember the position
 //     Can be taken from elStorage
 //     For example:   storage.variable("seq_1")
 let scene = elSeqText(countVar,

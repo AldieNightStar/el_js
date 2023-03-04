@@ -317,49 +317,49 @@ function elCountDown(count, ms, cb) {
 	})
 }
 
-(function () {
-	class Variable {
-		constructor(getter, setter) {
-			this.getter = getter;
-			this.setter = setter;
-		}
-		get() {
-			return this.getter();
-		}
-		set(val) {
-			return this.setter(val)
-		}
-		isNull() {
-			let val = this.get();
-			return val === null || val === undefined
-		}
-		inital(val) {
-			if (this.isNull()) this.set(val);
-			return this.get();
-		}
-	}
 
-	function elStorage(section, provider) {
-		if (provider === undefined) provider = () => sessionStorage;
-		let el = {};
-		let secname = name => section + "." + name;
-		el.set = (name, val) => provider().setItem(secname(name), JSON.stringify(val));
-		el.get = (name) => JSON.parse(provider().getItem(secname(name)));
-		el.variable = name => new Variable(() => el.get(name), v => el.set(name, v));
-		return el;
+class ElVariable {
+	constructor(getter, setter) {
+		this.getter = getter;
+		this.setter = setter;
 	}
-	window.elStorage = elStorage;
+	get() {
+		return this.getter();
+	}
+	set(val) {
+		return this.setter(val)
+	}
+	isNull() {
+		let val = this.get();
+		return val === null || val === undefined
+	}
+	inital(val) {
+		if (this.isNull()) this.set(val);
+		return this.get();
+	}
+}
 
-	elStorage.LOCAL = () => localStorage
-	elStorage.SESSION = () => sessionStorage
-	elStorage.CACHE = () => {
-		let dat = {}
-		return {
-			getItem(name) { return dat[name]; },
-			setItem(name, val) { dat[name] = val; }
-		}
+function elStorage(section, provider) {
+	if (provider === undefined) provider = () => sessionStorage;
+	let el = {};
+	let secname = name => section + "." + name;
+	el.set = (name, val) => provider().setItem(secname(name), JSON.stringify(val));
+	el.get = (name) => JSON.parse(provider().getItem(secname(name)));
+	el.variable = name => new ElVariable(() => el.get(name), v => el.set(name, v));
+	return el;
+}
+window.elStorage = elStorage;
+
+elStorage.LOCAL = () => localStorage
+elStorage.SESSION = () => sessionStorage
+elStorage.CACHE = () => {
+	let dat = {}
+	return {
+		getItem(name) { return dat[name]; },
+		setItem(name, val) { dat[name] = val; }
 	}
-})()
+}
+
 
 function elEvent() {
 	let funcs = [];

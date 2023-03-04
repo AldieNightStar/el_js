@@ -1,6 +1,5 @@
 # Storage stuff
 
-
 ### Storage
 ```js
 // Create storage memory
@@ -23,11 +22,28 @@ store.set('a', val1);
 // Get items by name
 store.get('a');
 
-// Make variable by name
+// Make ElVariable by name (Check Variable part)
 // Under the hood it works as get/set
 let v = store.variable('a')
+```
+
+
+
+
+
+### Variable
+```js
+let v = ElVariable(getter, setter);
+
+// Set value
 v.set(123);
+
+// Get value
 v.get();
-v.isNull();    // Returns true if variable is null or undefined
-v.inital(val); // If variable is null then default 'val' will be set
+
+// Returns true if variable is null or undefined
+v.isNull();
+
+// If variable is null then default 'val' will be set
+v.inital(val);
 ```
