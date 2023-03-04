@@ -45,7 +45,7 @@ function elInner(val) { return (el) => el.innerHTML = val; }
 
 function elButton(caption, onClick, cb) {
 	return el('button', b => {
-		b.innerText = caption;
+		b.innerHTML = caption;
 		b.onclick = onClick;
 		if (cb) cb(b);
 	});
@@ -61,7 +61,7 @@ function elButtonR(caption, sceneFn) {
 
 function elText(text, cb) {
 	return el("span", t => {
-		t.innerText = text;
+		t.innerHTML = text;
 		if (cb) cb(t);
 		// API
 		t.setText = (t) => {
