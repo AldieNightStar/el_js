@@ -41,5 +41,8 @@ el("span")
 
 // Delete the element (It will be disconnected from DOM)
 e.delete();
+
+// Add element to "document.body"
+elto(document.body, e);
 ```
 
