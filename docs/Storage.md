@@ -1,5 +1,12 @@
 # Storage stuff
 
+* Building block for most elements
+* Used to save/restore states and data in elements
+* Allows you to create `ElVariable`'s and choose where to save them
+
+---
+
+
 ### Storage
 ```js
 // Create storage memory

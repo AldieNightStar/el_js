@@ -1,5 +1,12 @@
 # Scenes
 
+* Scene related stuff
+* Scenes are used for state-based elements and/or Novels
+* Better to use `NamedScenes` as it saves it state from page reloads
+
+---
+
+
 ### Scene Element
 ```js
 // Creates Scene Element

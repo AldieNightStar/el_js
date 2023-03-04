@@ -1,5 +1,13 @@
 # Timers
 
+* Here is Timers and Count-down stuff
+* For example here are timer which lives as long as it's DOM element
+    * So when scene is cleared or reloaded - that timer will disappear
+* Better to use `elTimer` than `setInterval`
+
+---
+
+
 
 ### Timer Element
 ```js

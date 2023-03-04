@@ -1,6 +1,9 @@
 # Interactive Elements
 
+* Here is interactive stuff
+* User choices, list/order list etc
 
+---
 
 ### Choice
 ```js
