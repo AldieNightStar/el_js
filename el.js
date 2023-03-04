@@ -280,14 +280,16 @@ function elOrder(values, renderer, cb) {
 }
 
 // Collapser scene
-function elCollapse(caption, fn) {
-	let collapse = true;
-	let collapseToggle = () => { collapse = !collapse }
+function elCollapse(collapsedVar, caption, fn) {
+	collapsedVar.init(true);
+
+	// Changes collapsedVar state
+	let collapseToggle = () => { collapsedVar.set(!collapsedVar.get) }
 
 	return elScene(api => {
 		let span = api.span();
 
-		span.isCollapsed = () => collapse;
+		span.isCollapsed = () => collapsedVar.get();
 
 		span.toggle = () => {
 			collapseToggle();

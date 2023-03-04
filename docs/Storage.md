@@ -40,6 +40,9 @@ let v = store.variable('a')
 
 ### Variable
 ```js
+// Create ElVariable from getter and setter
+// getter - func() -> value
+// setter - func(val) -> bool
 let v = ElVariable(getter, setter);
 
 // Set value

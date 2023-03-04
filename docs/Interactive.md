@@ -69,7 +69,11 @@ elOrder(
 ```js
 // Will add scene with ability to collapse
 // When collapsed - all elements are removed
-let c = elCollapse("Items", api => {
+// Accepts:
+//     stateVar - ElVariable which can have true or false
+//     title    - Caption
+//     func     - Function which accepts scene API
+let c = elCollapse(stateVar, "Items", api => {
     // api - same as in Scene element
 })
 ```
