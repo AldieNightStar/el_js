@@ -319,16 +319,20 @@ function elCountDown(count, ms, cb) {
 			let val = this.get();
 			return val === null || val === undefined
 		}
+		inital(val) {
+			if (this.isNull()) this.set(val);
+			return this.get();
+		}
 	}
 
 	function elStorage(section, provider) {
 		if (provider === undefined) provider = () => sessionStorage;
-		return el("span", el => {
-			let secname = name => section + "." + name;
-			el.set = (name, val) => provider().setItem(secname(name), JSON.stringify(val));
-			el.get = (name) => JSON.parse(provider().getItem(secname(name)));
-			el.variable = name => new Variable(() => el.get(name), v => el.set(name, v));
-		})
+		let el = {};
+		let secname = name => section + "." + name;
+		el.set = (name, val) => provider().setItem(secname(name), JSON.stringify(val));
+		el.get = (name) => JSON.parse(provider().getItem(secname(name)));
+		el.variable = name => new Variable(() => el.get(name), v => el.set(name, v));
+		return el;
 	}
 	window.elStorage = elStorage;
 
@@ -345,15 +349,15 @@ function elCountDown(count, ms, cb) {
 
 function elEvent() {
 	let funcs = [];
-	return el("span", el => {
-		el.connect = fn => {
-			funcs.push(fn);
-		}
-		el.emit = dat => {
-			funcs = funcs.filter(f => f(dat))
-		}
-		el.clear = funcs = [];
-	});
+	let el = {};
+	el.connect = fn => {
+		funcs.push(fn);
+	}
+	el.emit = dat => {
+		funcs = funcs.filter(f => f(dat))
+	}
+	el.clear = funcs = [];
+	return el;
 }
 
 function elNamedScenes(nameVariable, scenesObj) {

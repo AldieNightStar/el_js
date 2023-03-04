@@ -330,7 +330,8 @@ c.api.stop();
 
 ### Storage
 ```js
-// Create storage memory for the elements
+// Create storage memory
+// Its not an Element (Don't add to a Scene or DOM)
 // Each storage should have it's own namespace. For example "mystore"
 // provider - is a function which provide connection to a memory. By Default: () => sessionStorage
 //     providers:
@@ -349,11 +350,13 @@ store.set('a', val1);
 // Get items by name
 store.get('a');
 
-// Get variable by name
+// Make variable by name
+// Under the hood it works as get/set
 let v = store.variable('a')
 v.set(123);
 v.get();
-v.isNull(); // Returns true if variable is null or undefined
+v.isNull();    // Returns true if variable is null or undefined
+v.inital(val); // If variable is null then default 'val' will be set
 ```
 
 
@@ -361,7 +364,8 @@ v.isNull(); // Returns true if variable is null or undefined
 
 ### Event Element
 ```js
-// Create events element
+// Create Event object
+// It's not an Element (Don't append it to a scene or DOM)
 let evt = elEvent();
 
 // Connect to Events
