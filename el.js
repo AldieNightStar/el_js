@@ -280,3 +280,29 @@ function elCountDown(count, ms, cb) {
 		});
 	})
 }
+
+(function() {
+	class Variable {
+		constructor(getter, setter) {
+			this.getter = getter;
+			this.setter = setter;
+		}
+		get() {
+			return this.getter();
+		}
+		set(val) {
+			return this.setter(val)
+		}
+	}
+
+	function elStorage(section, provider) {
+		if (provider === undefined) provider = () => sessionStorage;
+		return el("span", el => {
+			let secname = name => section + "." + name;
+			el.set = (name, val) => provider().setItem(secname(name), JSON.stringify(val));
+			el.get = (name) => JSON.parse(provider().getItem(secname(name)));
+			el.variable = name => new Variable(() => el.get(name), v => el.set(name, v));
+		})
+	}
+	window.elStorage = elStorage;
+})()

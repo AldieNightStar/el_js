@@ -262,3 +262,26 @@ let c = elCountDown(32, 1000, n => {
 // Delete the count-down scene
 c.api.stop();
 ```
+
+
+
+
+
+### Storage
+```js
+// Create storage memory for the elements
+// Each storage should have it's own namespace. For example "mystore"
+// provider - is a function which provide connection to a memory (Optional. By Default: () => sessionStorage)
+let store = elStorage("mystore", provider);
+
+// Set items by name
+store.set('a', val1);
+
+// Get items by name
+store.get('a');
+
+// Get variable by name
+let v = store.variable('a')
+v.set(123);
+v.get();
+```
