@@ -6,11 +6,18 @@
 		window.addEventListener('load', () => {
 			elto(document.body, elScene(api => {
 				// Logic
-				let el = elCountDown(5, 1000, t => {
-					console.log(t)
-				})
+				let event = api.append(elEvent());
+				let cnt = 0;
 
-				api.appendLn(el);
+				// Button to activate the event
+				api.appendLn(elButton("Push me", () => event.emit("Pushed button " + (cnt++))));
+
+				api.appendLn(elText("text", el => {
+					event.connect(d => {
+						el.innerHTML = d;
+						return el.isConnected;
+					})
+				}))
 			}));
 		});
 	</script>

@@ -316,3 +316,16 @@ function elCountDown(count, ms, cb) {
 		}
 	}
 })()
+
+function elEvent() {
+	let funcs = [];
+	return el("span", el => {
+		el.connect = fn => {
+			funcs.push(fn);
+		}
+		el.emit = dat => {
+			funcs = funcs.filter(f => f(dat))
+		}
+		el.clear = funcs = [];
+	});
+}
