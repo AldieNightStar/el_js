@@ -35,8 +35,8 @@ e.delete();
 
 # Documentation
 
-(Basic Elements)[docs/Basic.md]
-(Interactive Elements)[docs/Interactive.md]
-(Scene related stuff)[docs/Scenes.md]
-(Timers etc)[docs/Timers.md]
-(Special Elements)[docs/Special.md]
+[Basic Elements](docs/Basic.md)
+[Interactive Elements](docs/Interactive.md)
+[Scene related stuff](docs/Scenes.md)
+[Timers etc](docs/Timers.md)
+[Special Elements](docs/Special.md)
