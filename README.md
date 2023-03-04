@@ -17,7 +17,8 @@
 - [Interactive Elements](docs/Interactive.md)
 - [Scene related stuff](docs/Scenes.md)
 - [Timers etc](docs/Timers.md)
-- [Special Elements](docs/Special.md)
+- [Storage stuff](docs/Storage.md)
+- [Event System](docs/Events.md)
 
 ### Core Element
 ```js
