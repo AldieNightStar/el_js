@@ -436,6 +436,7 @@ class ElInterpolBuilder {
 		// Will set into this array new vales
 		// And when last call will be executed, we execute: this.callback(...arr)
 		let arr = [...this.fromValues]
+		let callbackToUse = this.callback;
 		for (let i = 0; i < this.fromValues.length; i++) {
 			let id = i;
 			let isLast = id == this.fromValues.length - 1
@@ -443,7 +444,7 @@ class ElInterpolBuilder {
 				arr[id] = val;
 				if (isLast) {
 					// Will call accumulated values
-					this.callback(...arr);
+					callbackToUse(...arr);
 				}
 			});
 		}
