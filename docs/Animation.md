@@ -94,6 +94,11 @@ line.addInterpol(from_frame, to_frame, from_val, to_val, (frame, val) => { /* ..
 // Add function on specific frame
 line.addFunction(frame, () => { /* ... */ })
 
+// Use interpolation builder
+// Check documentation "Animation Interpol Builder" below
+line.with((x, y, z) => {})
+    .on(1, 10).from(1, 2, 3).to(10, 20, 30).animate()
+
 // Get player from it    (ElAnimationPlayer)
 let player = line.player(isRepeating, player => {
     // Will execute on last frame
