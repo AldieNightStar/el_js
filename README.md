@@ -362,7 +362,7 @@ v.inital(val); // If variable is null then default 'val' will be set
 
 
 
-### Event Element
+### Events
 ```js
 // Create Event object
 // It's not an Element (Don't append it to a scene or DOM)
