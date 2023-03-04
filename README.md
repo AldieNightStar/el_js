@@ -11,6 +11,12 @@
 
 * `cb` - means that this will call after blank element creation. So all the parameters you make yourself
 
+# Install
+```sh
+git clone git@github.com:AldieNightStar/el_js.git
+```
+
+
 # Documentation
 
 - [Basic Elements](docs/Basic.md)
