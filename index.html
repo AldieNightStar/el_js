@@ -10,76 +10,41 @@
 	<script type="text/javascript">
 		window.addEventListener('load', () => {
 			window.store = elStorage("store");
-
-			let floatText = () => {
-				return elText("Floating text :)")
-					.then(elStyle("position", "absolute"))
-					.then(elStyle("transition", "100ms"));
-			}
-			let fpos = (t, x, y) => {
-				t.style.left = x + "px";
-				t.style.top = y + "px";
-			}
-
-			// Named scene for global state
 			elto(document.body, elNamedScenes(store.variable("mainScene"), {
+				// Main scene
 				main: api => {
 
-					// Floating text
-					let f1 = floatText();
-					let f2 = floatText();
-					let f3 = floatText();
-					let f4 = floatText();
-
-					api.append(f1);
-					api.append(f2);
-					api.append(f3);
-					api.append(f4);
+					let floatText = elText("^")
+						.then(elStyle("transition", "500ms"))
+						.then(elStyle("position", "absolute"))
+					api.append(floatText);
 
 					api.append(elAnimation(ani => {
-						// Create animation timeline
-						// We also could reuse other line (ElAnimationLine):
-						//     ani.fromLine(line);
-						ani.newLine(20, line => {
-							line.addInterpol(1, 10, 100, 200, (frame, value) => { fpos(f1, 100, value) })
-							line.addInterpol(11, 20, 200, 100, (frame, value) => { fpos(f1, 50, value) })
-
-							line.addInterpol(5, 10, 100, 200, (frame, value) => { fpos(f2, 200, value) })
-							line.addInterpol(16, 20, 200, 100, (frame, value) => { fpos(f2, 0, value) })
-
-							line.addInterpol(1, 15, 100, 200, (frame, value) => { fpos(f3, 200, value) })
-							line.addInterpol(16, 20, 200, 100, (frame, value) => { fpos(f3, 0, value) })
-
-							line.addInterpol(1, 5, 100, 200, (frame, value) => { fpos(f4, 50, value) })
-							line.addInterpol(6, 20, 200, 100, (frame, value) => { fpos(f4, 300, value) })
-
-							line.addFunction(5, () => f1.innerHTML = "#####")
-							line.addFunction(10, () => f1.innerHTML = "*****")
-							line.addFunction(15, () => f1.innerHTML = "-----")
-
-							line.addFunction(5, () => f2.innerHTML = "#####")
-							line.addFunction(10, () => f2.innerHTML = "-----")
-							line.addFunction(15, () => f2.innerHTML = "*****")
-
-							line.addFunction(5, () => f3.innerHTML = "*****")
-							line.addFunction(10, () => f3.innerHTML = "####")
-							line.addFunction(15, () => f3.innerHTML = "????")
+						ani.newLine(4, line => {
+							line.addFunction(1, () => { floatText.innerHTML = "^" })
+							line.addFunction(2, () => { floatText.innerHTML = "-" })
+							line.addFunction(3, () => { floatText.innerHTML = "v" })
+							line.addFunction(4, () => { floatText.innerHTML = "-" })
 						})
-
-						// Starting frame
-						// Starting from middle :)
-						ani.frame(10);
-
-						// Repeat the animation
-						ani.repeat(true)
-
-						// All the animation will go 3 seconds
-						ani.time(3000)
+						ani.repeat(true);
+						ani.time(250);
 					}));
 
+					api.append(elAnimation(ani => {
+						ani.newLine(20, line => {
+							line.addInterpol(1, 10, 0, 500, (f, x) => { floatText.style.left = x + "px" });
+							line.addInterpol(1, 10, 0, 50, (f, y) => { floatText.style.top = y + "px" });
+
+							line.addInterpol(11, 20, 500, 0, (f, x) => { floatText.style.left = x + "px" });
+							line.addInterpol(11, 20, 0, 50, (f, y) => { floatText.style.top = y + "px" });
+						})
+						ani.repeat(true);
+						ani.time(5000);
+					}))
 
 				}
-			}));
+
+			}))
 		});
 	</script>
 </body>
