@@ -348,7 +348,6 @@ function elStorage(section, provider) {
 	el.variable = name => new ElVariable(() => el.get(name), v => el.set(name, v));
 	return el;
 }
-window.elStorage = elStorage;
 
 elStorage.LOCAL = () => localStorage
 elStorage.SESSION = () => sessionStorage
