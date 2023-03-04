@@ -398,6 +398,55 @@ function elNamedScenes(nameVariable, scenesObj) {
 	})
 }
 
+class ElInterpolBuilder {
+	constructor(line) {
+		this.line = line; // ElAnimationLine
+		this.frame_from = 1;
+		this.frame_to = 1;
+	}
+	on(from, to) {
+		this.frame_from = from;
+		this.frame_to = to;
+		return this;
+	}
+	from(...values) {
+		this.fromValues = values;
+		return this;
+	}
+	to(...values) {
+		this.toValues = values;
+		return this;
+	}
+	with(callback) {
+		this.callback = callback;
+		return this;
+	}
+	next(frameCount) {
+		this.frame_from = this.frame_to;
+		this.frame_to = this.frame_from + frameCount;
+		return this;
+	}
+	animate() {
+		// We will accumulate all calls
+		// Will set into this array new vales
+		// And when last call will be executed, we execute: this.callback(...arr)
+		let arr = [...this.fromValues]
+		for (let i = 0; i < this.fromValues.length; i++) {
+			let id = i;
+			let isLast = id == this.fromValues.length - 1
+			this.line.addInterpol(this.frame_from, this.frame_to, this.fromValues[i], this.toValues[i], (f, val) => {
+				arr[id] = val;
+				if (isLast) {
+					// Will call accumulated values
+					this.callback(...arr);
+				}
+			});
+		}
+		this.fromValues = this.toValues;
+		return this;
+	}
+}
+
 // Animation line is control panel for creating animation
 // Then it will be used in ElAnimationPlayer for playing
 class ElAnimationLine {
@@ -444,6 +493,8 @@ class ElAnimationLine {
 			}]);
 		}
 	}
+
+	with(callback) { return new ElInterpolBuilder(this).with(callback); }
 
 	getPlayer(repeat, onEnd) {
 		return ElAnimationPlayer(this, repeat, onEnd)

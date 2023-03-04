@@ -17,29 +17,34 @@
 					let floatText = elText("^")
 						.then(elStyle("transition", "500ms"))
 						.then(elStyle("position", "absolute"))
+					let setXY = (x, y) => {
+						floatText.style.left = x + "px"
+						floatText.style.top = y + "px"
+					}
+
 					api.append(floatText);
 
 					api.append(elAnimation(ani => {
 						ani.newLine(4, line => {
-							line.addFunction(1, () => { floatText.innerHTML = "^" })
-							line.addFunction(2, () => { floatText.innerHTML = "-" })
-							line.addFunction(3, () => { floatText.innerHTML = "v" })
-							line.addFunction(4, () => { floatText.innerHTML = "-" })
+							line.addFunction(1, () => { floatText.innerHTML = "^" });
+							line.addFunction(2, () => { floatText.innerHTML = "-" });
+							line.addFunction(3, () => { floatText.innerHTML = "v" });
+							line.addFunction(4, () => { floatText.innerHTML = "-" });
 						})
 						ani.repeat(true);
-						ani.time(250);
+						ani.time(100);
 					}));
 
 					api.append(elAnimation(ani => {
-						ani.newLine(20, line => {
-							line.addInterpol(1, 10, 0, 500, (f, x) => { floatText.style.left = x + "px" });
-							line.addInterpol(1, 10, 0, 50, (f, y) => { floatText.style.top = y + "px" });
-
-							line.addInterpol(11, 20, 500, 0, (f, x) => { floatText.style.left = x + "px" });
-							line.addInterpol(11, 20, 0, 50, (f, y) => { floatText.style.top = y + "px" });
-						})
+						ani.newLine(25, line => {
+							line.with(setXY)
+								.next(10).from(0, 0).to(500, 50).animate()
+								.next(5).to(600, 0).animate()
+								.next(10).to(0, 50).animate()
+								.next(5).to(0, 0).animate();
+						});
 						ani.repeat(true);
-						ani.time(5000);
+						ani.time(3000);
 					}))
 
 				}

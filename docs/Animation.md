@@ -28,6 +28,14 @@ let ani = elAnimation(ani => {
             flying_head.style.top = value + ".px";
         });
 
+        // Use interpolation builder
+        // line has method `with` which calls that builder
+        // Check out "Animation Interpol Builder" documentation below
+        line.with((x, y, z) => {})
+            .on(1, 10).from(1, 2, 3).to(10, 20, 30).animate()
+            .next(10).to(100, 200, 300).animate()
+            .next(10).to(1000, 2000, 3000).animate()
+
         // addInterpol example:
         //   Let's imagine we want to add 1 to 10 frames as interpolation from 100 to 200
         //   This way we will change position of the player from 100 to 200 during 1 to 10 frames
@@ -103,4 +111,26 @@ player.step();
 
 // Get player ended or not (true/false)
 player.ended
+```
+
+
+
+
+### Animation Interpol Builder
+* `line` has method `with(callback)` which creates builder.
+* This one could be used for better animation coding.
+* `animate()` is an animation step. This time `to(...)` values becomes `from(...)` values for future animations
+```js
+line.with((x, y) => player.setXY(x, y))
+    .on(1, 10) // Set frames from 1 to 10 (inclusive)
+    .from(0, 0) // Specify start values [0, 0]
+    .to(100, 100) // Specify end values [100, 100]
+    .animate() // Call animation process. Will also set from(...) values as to(...)
+
+    // Then since last frame add another 5 frames
+    // We use .next(frames) function for that
+    .next(5).from(100, 100).to(0, 0).animate()
+    .next(5).from(100, 100).to(200, 200).animate()
+    .next(5).from(200, 200).to(100, 100).animate() // and so forth
+
 ```
