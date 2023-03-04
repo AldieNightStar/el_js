@@ -1,54 +1,80 @@
 <html>
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta charset="UTF-8">
-	</head>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta charset="UTF-8">
+</head>
+
 <body>
 	<script type="application/javascript" src="el.js"></script>
 	<script type="text/javascript">
 		window.addEventListener('load', () => {
-			// Storage
 			window.store = elStorage("store");
+
+			let floatText = () => {
+				return elText("Floating text :)")
+					.then(elStyle("position", "absolute"))
+					.then(elStyle("transition", "100ms"));
+			}
+			let fpos = (t, x, y) => {
+				t.style.left = x + "px";
+				t.style.top = y + "px";
+			}
+
 			// Named scene for global state
 			elto(document.body, elNamedScenes(store.variable("mainScene"), {
 				main: api => {
-					
+
 					// Floating text
-					let ftext = elText("Floating text :)")
-						.then(elStyle("position", "absolute"))
-						.then(elStyle("transition", "100ms"))
-					let fpos = (x, y) => {
-						ftext.style.left = x + "px";
-						ftext.style.top = y + "px";
-					}
-					api.append(ftext);
+					let f1 = floatText();
+					let f2 = floatText();
+					let f3 = floatText();
+					let f4 = floatText();
+
+					api.append(f1);
+					api.append(f2);
+					api.append(f3);
+					api.append(f4);
 
 					api.append(elAnimation(ani => {
 						// Create animation timeline
 						// We also could reuse other line (ElAnimationLine):
 						//     ani.fromLine(line);
 						ani.newLine(20, line => {
-							line.addInterpol(1, 10, 100, 200, (frame, value) => { fpos(100, value) })
-							line.addInterpol(11, 20, 200, 100, (frame, value) => { fpos(50, value) })
+							line.addInterpol(1, 10, 100, 200, (frame, value) => { fpos(f1, 100, value) })
+							line.addInterpol(11, 20, 200, 100, (frame, value) => { fpos(f1, 50, value) })
 
-							// Also we can add function but no need
-							line.addFunction(80, () => console.log("It's 80 frame"))
+							line.addInterpol(5, 10, 100, 200, (frame, value) => { fpos(f2, 200, value) })
+							line.addInterpol(16, 20, 200, 100, (frame, value) => { fpos(f2, 0, value) })
+
+							line.addInterpol(1, 15, 100, 200, (frame, value) => { fpos(f3, 200, value) })
+							line.addInterpol(16, 20, 200, 100, (frame, value) => { fpos(f3, 0, value) })
+
+							line.addInterpol(1, 5, 100, 200, (frame, value) => { fpos(f4, 50, value) })
+							line.addInterpol(6, 20, 200, 100, (frame, value) => { fpos(f4, 300, value) })
+
+							line.addFunction(5, () => f1.innerHTML = "#####")
+							line.addFunction(10, () => f1.innerHTML = "*****")
+							line.addFunction(15, () => f1.innerHTML = "-----")
+
+							line.addFunction(5, () => f2.innerHTML = "#####")
+							line.addFunction(10, () => f2.innerHTML = "-----")
+							line.addFunction(15, () => f2.innerHTML = "*****")
+
+							line.addFunction(5, () => f3.innerHTML = "*****")
+							line.addFunction(10, () => f3.innerHTML = "####")
+							line.addFunction(15, () => f3.innerHTML = "????")
 						})
 
 						// Starting frame
 						// Starting from middle :)
 						ani.frame(10);
 
-						ani.onEnd(p => {
-							// p - is player itself
-							console.log("Done on " + p.pos + " frame")
-						})
-
 						// Repeat the animation
 						ani.repeat(true)
 
 						// All the animation will go 3 seconds
-						ani.time(1000)
+						ani.time(3000)
 					}));
 
 
