@@ -168,9 +168,12 @@ let scene = elNamedScenes(nameVar, {
 ### Sequence of Scenes
 ```js
 // Create sequental scenes
+// Uses countVar (elStorage Variable) to remember the position
+//     Can be taken from elStorage
+//     For example:   storage.variable("seq_1")
 // To switch to the next, use:           api.next()
 // To check that this is the last one:   api.isLast()
-let scene = elSeq(
+let scene = elSeq(countVar
     api => {
         api.appendLn(elText("This is how i go!"))
         api.appendLn(elButton("Next >>", api.next))
@@ -193,7 +196,12 @@ scene.api.stop() // Stops the scene to display
 
 ### Sequence of Texts
 ```js
-let scene = elSeqText(
+// Creates sequental text scenes
+// Used only for long stories with 'next'-button based interactivity
+// Uses countVar (elStorage Variable) to remember the position
+//     Can be taken from elStorage
+//     For example:   storage.variable("seq_1")
+let scene = elSeqText(countVar,
     "This is the world",
     "We are here",
     "Now all set",
@@ -242,6 +250,7 @@ let inp = elInput("Enter your name", name => {
 ### Order of Elements
 ```js
 // Allows user to manage order of each element
+// Will not be saved during reload. Need to know it
 elOrder(elements => {
     // Will call on any change in order
     // elements - list of elements to work with

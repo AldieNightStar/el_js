@@ -150,28 +150,28 @@ function elScene(fn) {
 	});
 }
 
-function elSeq(...scenes) {
-	let sceneId = 0;
+function elSeq(countVar, ...scenes) {
+	if (countVar.isNull()) countVar.set(0);
 	return elScene(api => {
 		api.next = () => {
-			sceneId += 1;
-			if (sceneId >= scenes.length) return
+			countVar.set(countVar.get() + 1);
+			if (countVar.get() >= scenes.length) return
 			api.reload();
 		}
 		api.isLast = () => {
-			return (sceneId + 1) >= scenes.length
+			return (countVar.get() + 1) >= scenes.length
 		}
-		if (sceneId >= scenes.length) return
-		scenes[sceneId](api);
+		if (countVar.get() >= scenes.length) return
+		scenes[countVar.get()](api);
 	})
 }
 
-function elSeqText(...texts) {
+function elSeqText(countVar, ...texts) {
 	let scenes = texts.map(t => api => {
 		api.appendLn(elText(t))
 		if (!api.isLast()) api.appendLn(elButton(">>", api.next))
 	})
-	return elSeq(...scenes)
+	return elSeq(countVar, ...scenes)
 }
 
 function elChoose(cb, ...variants) {

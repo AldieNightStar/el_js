@@ -4,43 +4,18 @@
 	<script type="application/javascript" src="el.js"></script>
 	<script type="text/javascript">
 		window.addEventListener('load', () => {
-			function gotoButton(api, name) {
-				return elButton("Go to " + name, () => api.change(name));
-			}
-
-			function g1(api) {
-				api.appendLn(elText("This is a test for First G ONE"));
-				api.appendLn(gotoButton(api, "g1"));
-				api.appendLn(gotoButton(api, "g2"));
-				api.appendLn(gotoButton(api, "g3"));
-			}
-
-			function g2(api) {
-				api.appendLn(elText("This is a test for Second G TWO"));
-				api.appendLn(gotoButton(api, "g1"));
-				api.appendLn(gotoButton(api, "g2"));
-				api.appendLn(gotoButton(api, "g3"));
-			}
-
-			function g3(api) {
-				api.appendLn(elText("This is a test for Third G THREE	"));
-				api.appendLn(gotoButton(api, "g1"));
-				api.appendLn(gotoButton(api, "g2"));
-				api.appendLn(gotoButton(api, "g3"));
-			}
-
 			elto(document.body, elScene(api => {
 
 				// LOGIC
 				let store = api.append(elStorage("store"));
 
-				api.append(elNamedScenes(store.variable("name"), {
-					main: g1,
-					g1: g1,
-					g2: g2,
-					g3: g3
-				}));
-
+				api.append(elSeqText(store.variable("count"),
+					"This is the end",
+					"Of what we made",
+					"So now the story end",
+					"After this line",
+					"Finished!"
+				));
 
 			}));
 		});
