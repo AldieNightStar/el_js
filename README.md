@@ -12,8 +12,9 @@
 * `cb` - means that this will call after blank element creation. So all the parameters you make yourself
 
 # Install
+* Will download file `el.js` to your working folder
 ```sh
-git clone git@github.com:AldieNightStar/el_js.git
+curl https://raw.githubusercontent.com/AldieNightStar/el_js/master/el.js > el.js
 ```
 
 
