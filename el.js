@@ -552,27 +552,3 @@ function elAnimation(fn) {
 		if (!player.step()) t.stop();
 	});
 }
-
-function elAnimationLine()
-
-/*
-
-	let line = new ElAnimationLine(25);
-	// Add animations
-	line.addFunction(3, () => console.log("Third"))
-
-	line.addInterpol(0, 25, 10, 5, (f, i) => console.log("Frame", f, "Interpol val", i))
-
-	// Player
-	// let p = new ElAnimationPlayer(line, true, p => console.log("Anim end", p));
-	// let p = new ElAnimationPlayer(line);
-	let p = new ElAnimationPlayer(line, false, p => console.log("Anim end", p));
-
-	// Test with timer
-	let interval = setInterval(() => {
-		console.log("Frame...", p.pos)
-		p.step();
-		if (p.ended) clearInterval(interval);
-	}, 100)
-
-*/

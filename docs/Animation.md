@@ -73,7 +73,8 @@ ani.stop();
 ### Animation class
 * Can be used to prepare some animations
 ```js
-let line = new ElAnimationLine();
+// Create new Animation line
+let line = new ElAnimationLine(frames);
 
 // Add interpolation animation (Between frame)
 line.addInterpol(from_frame, to_frame, from_val, to_val, (frame, val) => { /* ... */ })
