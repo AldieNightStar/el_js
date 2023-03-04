@@ -11,8 +11,6 @@
 // Allows to create animations on the fly
 let ani = elAnimation(ani => {
     // Create animation timeline
-    // We also could reuse other line (ElAnimationLine):
-    //     ani.fromLine(line);
     // Receives:
     //     frames    - maximum frames in the new line
     //     callback  - callback for new line API
@@ -29,9 +27,14 @@ let ani = elAnimation(ani => {
             flying_head.style.top = value + ".px";
         });
 
+        // addInterpol example:
+        //   Let's imagine we want to add 1 to 10 frames as interpolation from 100 to 200
+        //   This way we will change position of the player from 100 to 200 during 1 to 10 frames
+        line.addInterpol(1, 10, 100, 200, (frame, xpos) => player.pos.x = xpos);
+
         // Also we can add function for specific frame
         // First argument
-        line.addFunction(frame, () => console.log("It's 80 frame"))
+        line.addFunction(frame, () => console.log("It's the X frame"))
     })
 
     // Starting frame. We can specify start-point frame (Default: 1)
@@ -57,10 +60,8 @@ let ani = elAnimation(ani => {
     ani.time(3000)
 
     // Use existing line (ElAnimationLine)
+    //   instead of:   ani.newLine(...)
     ani.fromLine(other_line)
-
-    // Create new line (ElAnimationLine)
-    ani.newLine(line => { /* ... */ }) // Check example above
 });
 
 // Terminate all the animation and Timer
