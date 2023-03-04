@@ -213,6 +213,9 @@ let scene = elSeq(countVar
         api.appendLn(elText("This is all"))
     }
 )
+
+scene.api.next() // Next sequent scene
+scene.api.isLast() // true if it's last scene
 scene.api.stop() // Stops the scene to display
 ```
 
@@ -233,6 +236,7 @@ let scene = elSeqText(countVar,
     "Done"
 )
 scene.api.next() // Set scene to the next text sequence
+scene.api.isLast() // true if it's last text
 scene.api.stop() // Stop displaying that scene
 ```
 
