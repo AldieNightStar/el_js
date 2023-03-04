@@ -5,7 +5,7 @@ function el(tag, cb) {
 	let e = document.createElement(tag);
 	if (cb) cb(e);
 	// Additional GLOBAL el API
-	e.then = cb2 => cb2(e);
+	e.then = cb2 => { cb2(e); return e; }
 	e.delete = () => e.parentElement.removeChild(e);
 	return e;
 }
@@ -397,3 +397,182 @@ function elNamedScenes(nameVariable, scenesObj) {
 		api.change(nameVariable.get())
 	})
 }
+
+// Animation line is control panel for creating animation
+// Then it will be used in ElAnimationPlayer for playing
+class ElAnimationLine {
+	// Create animation line and specify how much frames will it have
+	constructor(frames) {
+		// List of [frame, func]
+		this.line = [];
+		this.framesCount = frames;
+	}
+
+	// Add simple function call on frame arrive
+	// Function will not receive anything
+	addFunction(frame, func) {
+		// Do nothing if it's out of frames
+		if (frame > this.framesCount) return;
+
+		this.line.push([frame, func]);
+	}
+
+	// Add interpolation animation
+	// Parameters:
+	//     frame    - Frame to start
+	//     endFrame - Frame to end
+	//     fromVal  - Starting value
+	//     toVal    - Ending value
+	//     func     - Function which will receive:
+	//         frame - frame which is currently playing
+	//         value - interpolation value to be set (number)
+	addInterpol(frame, endFrame, fromVal, toVal, func) {
+		// Do nothing if it's out of frames
+		if (frame > this.framesCount) return;
+
+		// Generate interpolation stuff
+		let count = endFrame - frame;
+		let partPerFrame = (toVal - fromVal) / count
+		for (let i = 0; i <= count; i++) {
+			// Here we dividing function calls up to small parts from start to end positions
+			// We have partPerFrame - is interpolation small part of value which will be added each frame
+			// Animation could consume a lot of RAM so better to not create large amount of frames
+			this.line.push([frame + i, () => { // Push frame func
+				let id = i;
+				// Call function func(frame, value)
+				func(frame + id, fromVal + (partPerFrame * id));
+			}]);
+		}
+	}
+
+	getPlayer(repeat, onEnd) {
+		return ElAnimationPlayer(this, repeat, onEnd)
+	}
+}
+
+class ElAnimationPlayer {
+	/**
+	 * Create object based on animation line
+	 * @param {ElAnimationLine} animLine Animation line to read all from
+	 */
+	constructor(animLine, repeat, onEnd) {
+		/** @type {ElAnimationLine} */
+		this.line = animLine;
+		this.pos = 1;
+		this.ended = false; // Will be true when animation ends (and it's not repeatable)
+		this.repeat = repeat; // Make animation repeatable
+		this.onEnd = onEnd; // Will call when animation ended or repeatet (receives this animation)
+	}
+
+	// Play step by step. Use it in your timers
+	// Returns true when it's able to play again
+	// Returns false when it's not able to play again. 
+	step() {
+		// Don't allow to play animation which is ended
+		if (this.ended) return false;
+
+		// Get funcs which is in current frame
+		// ani[0] - frame position
+		// ani[1] - function to be called without parameters
+		let funcs = this.line.line.filter(ani => ani[0] == this.pos).map(ani => ani[1])
+
+		// Call each function
+		funcs.forEach(f => f());
+
+		if (this.pos >= this.line.framesCount) {
+			// Call callback onEnd
+			this.onEnd(this);
+			// Set to be ended if repeat is false
+			if (this.repeat) {
+				this.pos = 0;
+			} else {
+				this.ended = true;
+			}
+			return !this.ended;
+		}
+
+		this.pos += 1;
+
+		return true;
+	}
+}
+
+
+// Crate Timer element with animation features
+// Receives:
+//     fn - callback function with animation API
+function elAnimation(fn) {
+	let api = {};
+
+	let onEnd = () => {};
+	let doRepeat = false;
+	let startingFrame = 1;
+	let animationTime = null;
+	let animationPerFrame = 0; // Time per each frame
+	let line = null;
+
+	// API
+	api.repeat = flag => doRepeat = flag;
+	api.onEnd = cb => onEnd = cb;
+	api.frame = n => startingFrame = n;
+	api.time = ms => animationTime = ms;
+	api.fromLine = (l) => line = l;
+	api.newLine = (frames, cb) => {
+		let newLine = new ElAnimationLine(frames);
+		cb(newLine)
+		line = newLine;
+		return newLine;
+	}
+
+	// Call API func
+	fn(api);
+
+	if (!line) {
+		console.error("elAnimation:", "ElAnimationLine is not set. Animation will not execute")
+		// Fallback timer
+		return elTimer(100, t => t.stop());
+	}
+
+	if (animationTime === null) {
+		console.error("elAnimation:", ".time(...) is not set. Animation will not execute")
+		// Fallback timer
+		return elTimer(100, t => t.stop());
+	}
+
+	// Count time in ms for each frame
+	animationPerFrame = animationTime / line.framesCount
+
+	// Bootstraping player
+	/** @type {ElAnimationPlayer} */
+	let player = new ElAnimationPlayer(line, doRepeat, p => { if (onEnd) onEnd(p); });
+	player.pos = startingFrame;
+
+	// Will execute in timer on current DOM element it returns
+	return elTimer(animationPerFrame, t => {
+		if (!player.step()) t.stop();
+	});
+}
+
+function elAnimationLine()
+
+/*
+
+	let line = new ElAnimationLine(25);
+	// Add animations
+	line.addFunction(3, () => console.log("Third"))
+
+	line.addInterpol(0, 25, 10, 5, (f, i) => console.log("Frame", f, "Interpol val", i))
+
+	// Player
+	// let p = new ElAnimationPlayer(line, true, p => console.log("Anim end", p));
+	// let p = new ElAnimationPlayer(line);
+	let p = new ElAnimationPlayer(line, false, p => console.log("Anim end", p));
+
+	// Test with timer
+	let interval = setInterval(() => {
+		console.log("Frame...", p.pos)
+		p.step();
+		if (p.ended) clearInterval(interval);
+	}, 100)
+
+*/

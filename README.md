@@ -25,6 +25,7 @@ git clone git@github.com:AldieNightStar/el_js.git
 - [Timers etc](docs/Timers.md)
 - [Storage stuff](docs/Storage.md)
 - [Event System](docs/Events.md)
+- [Animation stuff](docs/Animation.md)
 
 ### Core Element
 ```js

@@ -13,19 +13,45 @@
 			elto(document.body, elNamedScenes(store.variable("mainScene"), {
 				main: api => {
 					
-					api.appendLn(elOrder(
-						["Alpha", "Beta", "Gamma", "Omega"],
-						(id, val) => elText(val),
-						console.log
-					));
+					// Floating text
+					let ftext = elText("Floating text :)")
+						.then(elStyle("position", "absolute"))
+						.then(elStyle("transition", "100ms"))
+					let fpos = (x, y) => {
+						ftext.style.left = x + "px";
+						ftext.style.top = y + "px";
+					}
+					api.append(ftext);
 
-					api.appendLn(el("hr"));
+					api.append(elAnimation(ani => {
+						// Create animation timeline
+						// We also could reuse other line (ElAnimationLine):
+						//     ani.fromLine(line);
+						ani.newLine(20, line => {
+							line.addInterpol(1, 10, 100, 200, (frame, value) => { fpos(100, value) })
+							line.addInterpol(11, 20, 200, 100, (frame, value) => { fpos(50, value) })
+
+							// Also we can add function but no need
+							line.addFunction(80, () => console.log("It's 80 frame"))
+						})
+
+						// Starting frame
+						// Starting from middle :)
+						ani.frame(10);
+
+						ani.onEnd(p => {
+							// p - is player itself
+							console.log("Done on " + p.pos + " frame")
+						})
+
+						// Repeat the animation
+						ani.repeat(true)
+
+						// All the animation will go 3 seconds
+						ani.time(1000)
+					}));
 
 
-					api.appendLn(elList(
-						["Aldie", "Richard", "Tiffie", "Timmy", "Nimferia"],
-						(id, val) => elText("Name [" + val + "]")
-					));
 				}
 			}));
 		});
