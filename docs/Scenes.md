@@ -52,24 +52,21 @@ scene.api
 
 ### Named Scenes
 ```js
-// Create named scenes from storageVariable
-//     storageVariable could be get from elStorage
+// Creates named scenes which syncs with variable
+//     ElVariable could be get from elStorage
 //     for example:   storage.variable("name")
-// Works as simple scenes
-// BUT has differences in API
 // First scene name is "main"
 let scene = elNamedScenes(nameVar, {
     main: api => {
         // API mostly the same as Scene API
-        // Differences:
         
         // Change scene to another (by name)
         // Here we provide name (not a function)
         api.change("scene1");
 
-        // Reload will work by getting name
-        //   from variable and then resolve
-        //   which scene need to load
+        // Reload will run scene by name
+        // name could be changed with:
+        //     api.change("scene")
         api.reload();
     },
     scene1: api => {},
