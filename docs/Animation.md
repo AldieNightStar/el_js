@@ -74,6 +74,7 @@ ani.stop();
 * Can be used to prepare some animations
 ```js
 // Create new Animation line
+// frames  - frame count
 let line = new ElAnimationLine(frames);
 
 // Add interpolation animation (Between frame)
