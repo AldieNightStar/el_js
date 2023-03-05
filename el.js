@@ -78,23 +78,26 @@ function elTimer(intervalMs, ontick) {
 		let inum = 0;
 
 		// Interval
-		inum = setInterval(() => {
-			count += 1;
-			if (!span.isConnected) {
-				// Call onFree method when timer removing
-				if (span.onFree) span.onFree();
-				// Remove the timer
-				clearInterval(inum);
-			} else {
-				ontick(span);
-			}
-		}, intervalMs);
+		span.start = () => {
+			inum = setInterval(() => {
+				count += 1;
+				if (!span.isConnected) {
+					// Call onFree method when timer removing
+					if (span.onFree) span.onFree();
+					// Remove the timer
+					clearInterval(inum);
+				} else {
+					ontick(span);
+				}
+			}, intervalMs);
+		}
 
 		// API
 		span.count = () => count;
+		
 		span.stop = () => {
 			clearInterval(inum);
-			span.parentElement.removeChild(span); // Remove itself
+			span.remove(); // Remove itself
 		}
 	})
 }
@@ -151,7 +154,7 @@ function elScene(fn) {
 		api.stop = () => sceneSpan.parentElement.removeChild(sceneSpan);
 
 		// Adds a timer to the Scene
-		api.timer = (ms, timerCb) => api.append(elTimer(ms, timerCb));
+		api.timer = (ms, timerCb) => api.append(elTimer(ms, timerCb).start());
 
 		// Return span element
 		api.span = () => sceneSpan
@@ -619,9 +622,10 @@ function elAnimation(fn, debug) {
 	}
 
 	// Will execute in timer on current DOM element it returns
+	// Timer will immediately start
 	let timer = elTimer(animationPerFrame, t => {
 		if (!player.step()) t.stop();
-	});
+	}).start();
 
 	// API for other elements
 	timer.paused = (flag) => { player.paused = flag; }
@@ -751,7 +755,7 @@ function elAudio(fn) {
 				.filter(s => dec(s[0]) === dec(aud.currentTime))
 				.map(s => s[1])
 				.forEach(cb => cb())
-		}));
+		}).start());
 		timer.api = () => api;
 		timer.onFree = () => {
 			// Free up the memory from Audio

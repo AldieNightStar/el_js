@@ -18,6 +18,9 @@
 let t = elTimer(intervalMs, ontimer)
 let t = elTimerOnce(intervalMs, ontimer)
 
+// Start the timer (Before that it will not run)
+t.start()
+
 // Retunrs how many ticks were happen
 t.count()
 
