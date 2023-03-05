@@ -689,7 +689,6 @@ function elAudio(fn) {
 
 		let secondEvents = [];
 		let onErr = null;
-		let beatSeconds = null;
 
 		// API setup
 		api.src = s => {
@@ -730,13 +729,10 @@ function elAudio(fn) {
 			}
 
 			// Setting up the onBeat callbacks
-			// Uses timeout and 100ms to wait before the init
-			elto(span, elTimerOnce(100, t => {
-				let dur = api.duration();
-				for (let i = 0; i < dur; i += secondsPerBeat) {
-					api.onSecond(dec(i), f);
-				};
-			}))
+			// It will work only for songs around 5 mins
+			for (let i = 0; i < 600; i += secondsPerBeat) {
+				api.onSecond(dec(i), f);
+			};
 		}
 
 		let timer = elto(span, elTimer(100, t => {
