@@ -734,7 +734,6 @@ function elAudio(fn) {
 			elto(span, elTimerOnce(100, t => {
 				let dur = api.duration();
 				for (let i = 0; i < dur; i += secondsPerBeat) {
-					console.log(dec(i))
 					api.onSecond(dec(i), f);
 				};
 			}))
