@@ -517,12 +517,16 @@ class ElAnimationPlayer {
 		this.ended = false; // Will be true when animation ends (and it's not repeatable)
 		this.repeat = repeat; // Make animation repeatable
 		this.onEnd = onEnd; // Will call when animation ended or repeatet (receives this animation)
+		this.paused = false; // WIll block step but will not return false.
 	}
 
 	// Play step by step. Use it in your timers
 	// Returns true when it's able to play again
 	// Returns false when it's not able to play again. 
 	step() {
+		// If pause we still return true
+		// But do nothing until someone set 'this.paused' to false
+		if (this.paused) return true;
 		// Don't allow to play animation which is ended
 		if (this.ended) return false;
 
@@ -558,7 +562,7 @@ class ElAnimationPlayer {
 function elAnimation(fn, debug) {
 	let api = {};
 
-	let onEnd = () => {};
+	let onEnd = () => { };
 	let doRepeat = false;
 	let startingFrame = 1;
 	let animationPerFrame = 50; // Default: 20 FPS
@@ -595,9 +599,9 @@ function elAnimation(fn, debug) {
 	if (debug === true) {
 		return elScene(sceneApi => {
 			let t = sceneApi.appendLn(elText("A[]"));
-			let upd  = () => { t.setText("A[" + player.pos + "/" + player.line.framesCount + "]"); }
+			let upd = () => { t.setText("A[" + player.pos + "/" + player.line.framesCount + "]"); }
 			upd();
-			let rev  = () => { player.pos -= 2; if (player.pos < 0) { player.pos = 0; }; player.step(); upd();  }
+			let rev = () => { player.pos -= 2; if (player.pos < 0) { player.pos = 0; }; player.step(); upd(); }
 			let next = () => { player.step(); upd(); }
 			sceneApi.append(elButton("&lt;A", rev))
 			sceneApi.append(t);
@@ -606,7 +610,62 @@ function elAnimation(fn, debug) {
 	}
 
 	// Will execute in timer on current DOM element it returns
-	return elTimer(animationPerFrame, t => {
+	let timer = elTimer(animationPerFrame, t => {
 		if (!player.step()) t.stop();
+	});
+
+	// API for other elements
+	timer.paused = (flag) => { player.paused = flag; }
+	timer.frames = () => player.line.framesCount
+	timer.getFrame = () => player.pos
+	timer.setFrame = n => { player.pos = n; }
+
+	return timer;
+}
+
+function elFloating(elem, x, y) {
+	return el('span', span => {
+		// Set up the style properties
+		span.style.position = "relative";
+		span.style.left = x + "px";
+		span.style.top = y + "px";
+		span.style.transition = "100ms";
+
+		// Position setter
+		let setPosEl = (newX, newY) => {
+			span.style.left = newX + "px";
+			span.style.top = newY + "px";
+			x = newX;
+			y = newY;
+		}
+
+		// Add our element
+		elto(span, elem);
+
+		let newAni = () => elAnimation(api => {
+			api.newLine(20, line => {
+				line.with(val => span.style.top = val + "px")
+					.on(5, 10).from(y).to(y + 15).animate()
+					.next(5).animate()
+					.next(5).to(y).animate()
+					.next(5).animate();
+			})
+			api.time(50)
+			api.repeat(true);
+		});
+
+		// Add animation
+		let ani = elto(span, newAni());
+
+		// API
+		span.getPos = () => ({ x, y });
+		span.setPos = (posX, posY) => {
+			ani.stop();
+			setPosEl(posX, posY);
+			ani = elto(span, newAni());
+		}
+		span.floating = flag => ani.paused(!flag);
+		span.elem = () => elem;
+		span.absolute = flag => span.style.position = flag ? "absolute" : "relative";
 	});
 }
