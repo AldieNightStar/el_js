@@ -688,6 +688,7 @@ function elAudio(fn) {
 		let aud = elto(span, new Audio());
 
 		let secondEvents = [];
+		let onBeat = null;
 		
 		// API setup
 		api.src = s => { aud.src = s; }
@@ -701,6 +702,22 @@ function elAudio(fn) {
 		api.playing = () => !aud.paused;
 		api.audio = () => aud;
 		api.onEnd = f => { aud.onended = f; }
+		api.onBeat = (bpm, f) => {
+			// Get beats per second
+			let bps = (bpm / 60)
+			
+			// Get how many seconds each beat has
+			let secondsPerBeat = 1 / bps
+			
+			// Do not wrong values
+			if (secondsPerBeat < 0.1) {
+				console.error("Wrong BPM, will not add onBeat callback", secondsPerBeat, "BPM: ", bpm, "BPS: ", bps);
+				return;
+			}
+
+			// Setting up the onBeat callback
+			onBeat = {sec: secondsPerBeat, callback: f};
+		}
 
 		let dec = n => Math.floor(n * 10) / 10
 		
@@ -729,6 +746,41 @@ function elAudio(fn) {
 
 		// Call
 		fn(api)
+
+		// onBeat callback setup
+		if (onBeat) {
+			// Will create timer for beats
+			let beatMs = Math.floor(onBeat.sec * 1000);
+			elto(span, elTimer(beatMs, t => {
+				// No music, no beats :)
+				if (aud.paused) return;
+
+				// Get current milliseconds from Audio currentTime
+				let currentMs = Math.floor(aud.currentTime * 1000);
+				// Check for offbeat shifting
+				// We will take how much ms we far from actual beat
+				// The bigger value the worst
+				// We should keep it less than 100 ms for an beat illusion
+				beatShiftMs = beatMs - (currentMs % beatMs)
+
+				// beatShiftMs will never be 0 as player has problems to sync
+				// So it always shifting. Here we fixing that problem by adding ms-ds handly
+				
+				// If shift time 
+				if (beatShiftMs >= 100) {
+					// Will add 10ms to a time
+					// It will sync with time
+					// Idea to keep less than 100 latency
+					aud.currentTime -= 0.01
+				}
+
+				// Break when onBeat is null
+				if (onBeat === null) t.stop();
+
+				// Calling and giving this timer for future usage
+				onBeat.callback(t);
+			}));
+		}
 
 		span.api = () => api;
 	});

@@ -48,6 +48,11 @@ let aud = elAudio(a => {
     // Will be called when audio ends playing
     // Will NOT call when looping
     a.onEnd(callback)
+
+    // Callbacks for Beats
+    // Every beat will be called
+    //   bpm - beats per minute
+    a.onBeat(bpm, callback)
 });
 
 // To use that API again just call:

@@ -18,14 +18,16 @@
 					api.append(elButtonR("click me", b => {
 						window.a = b.append(elAudio(a => {
 							a.src("test.mp3");
-							// a.loop(true);
+							a.loop(true);
 							a.play();
-							a.onSecond(0, () => a.volume(0.5))
-							a.onSecond(1, () => a.volume(0.2))
 							a.volume(0.2);
 							a.onEnd(() => console.log("END"))
+							a.onBeat(140, () => console.log("BEAT"))
 						}));
 					}));
+					console.log(window.a);
+					api.append(elButton("Pause", () => window.a.api().pause()));
+					api.append(elButton("Play",  () => window.a.api().play() ));
 
 				}
 
