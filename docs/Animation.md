@@ -59,6 +59,11 @@ let ani = elAnimation(ani => {
 // Terminate all the animation and Timer
 // Will also remove the 'span' it creates
 ani.stop();
+
+// DEBUG Animation
+// ====================
+// Add true to the end. It will make animation in DEBUG mode
+elAnimation(api => { /* ... */ }, true)
 ```
 
 

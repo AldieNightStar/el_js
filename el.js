@@ -64,8 +64,8 @@ function elText(text, cb) {
 		t.innerHTML = text;
 		if (cb) cb(t);
 		// API
-		t.setText = (t) => {
-			t.innerText = t;
+		t.setText = (txt) => {
+			t.innerHTML = txt;
 		}
 	});
 }
@@ -140,7 +140,7 @@ function elScene(fn) {
 
 		// Add element to the scene
 		api.append = el => elto(sceneSpan, el);
-		api.appendLn = el => { elto(sceneSpan, el); elto(sceneSpan, elNext()); }
+		api.appendLn = el => { let r = elto(sceneSpan, el); elto(sceneSpan, elNext()); return r; }
 
 		// Remove this scene
 		api.stop = () => sceneSpan.parentElement.removeChild(sceneSpan);
@@ -539,7 +539,7 @@ class ElAnimationPlayer {
 			this.onEnd(this);
 			// Set to be ended if repeat is false
 			if (this.repeat) {
-				this.pos = 0;
+				this.pos = 1;
 			} else {
 				this.ended = true;
 			}
@@ -555,7 +555,7 @@ class ElAnimationPlayer {
 // Crate Timer element with animation features
 // Receives:
 //     fn - callback function with animation API
-function elAnimation(fn) {
+function elAnimation(fn, debug) {
 	let api = {};
 
 	let onEnd = () => {};
@@ -590,6 +590,20 @@ function elAnimation(fn) {
 	/** @type {ElAnimationPlayer} */
 	let player = new ElAnimationPlayer(line, doRepeat, p => { if (onEnd) onEnd(p); });
 	player.pos = startingFrame;
+
+	// DEBUG mode
+	if (debug === true) {
+		return elScene(sceneApi => {
+			let t = sceneApi.appendLn(elText("A[]"));
+			let upd  = () => { t.setText("A[" + player.pos + "/" + player.line.framesCount + "]"); }
+			upd();
+			let rev  = () => { player.pos -= 2; if (player.pos < 0) { player.pos = 0; }; player.step(); upd();  }
+			let next = () => { player.step(); upd(); }
+			sceneApi.append(elButton("&lt;A", rev))
+			sceneApi.append(t);
+			sceneApi.appendLn(elButton("A&gt;", next))
+		})
+	}
 
 	// Will execute in timer on current DOM element it returns
 	return elTimer(animationPerFrame, t => {
