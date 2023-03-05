@@ -36,10 +36,13 @@ elChoose((api, result) => {
 //     renderer - function(id, val) -> element
 //         it accepts id and value from list
 //         and should return element for this value
-elList(
+let l = elList(
     ["Aldie", "Richard", "Tiffie", "Timmy", "Nimferia"],
     (id, val) => elText(val)
 );
+
+// Reload the render of the list
+l.api.reload();
 ```
 
 

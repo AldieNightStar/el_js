@@ -116,7 +116,7 @@ function elPrefixed(prefixText, t) {
 	return el("span", e => {
 		// API
 		// set number
-		e.setNum = (n) => e.innerText = prefixText + n
+		e.setText = (n) => e.innerHTML = prefixText + n
 
 		// self call
 		e.setText(t);

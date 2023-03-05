@@ -1,0 +1,125 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+</head>
+<script src="el.js"></script>
+<script>
+    let renderSecondCode = timeval => "a.onSecond(" + timeval + ", () => {   });"
+    let renderTimes = list => list.map(renderSecondCode).join("\n")
+    let renderTimesToRenderer = list => {
+        window.outputText.value = renderTimes(list);
+    }
+    window.addEventListener('load', () => {
+        let safe = f => {
+            try { return f(); }
+            catch (e) { console.log("ERR", e) }
+        };
+        elto(document.body, el("input", input => {
+            input.type = "file";
+            input.onchange = () => {
+                // remove old audio
+                if (window.aud) {
+                    window.aud.api().stop();
+                    window.aud = null;
+                }
+                // Place new audio
+                window.aud = elto(document.body, elAudio(a => {
+                    a.src(input.files[0].name);
+                    a.play();
+                    a.loop();
+                }));
+            }
+        }))
+        elto(document.body, el("hr"));
+
+        // List inside which we have time points
+        let listTimes = [];
+
+        // Decrease numbers after dot to one
+        // was 1.234 became 1.2
+        let dec = n => Math.floor(n * 10) / 10
+
+        // Control buttons
+        // ====================
+        elto(document.body, elScene(api => {
+            api.append(elButton("PLAY", () => {
+                safe(() => window.aud.api().play());
+            }))
+            api.append(elButton("PAUSE", () => {
+                safe(() => window.aud.api().pause());
+            }))
+            api.append(elButton("STOP", () => {
+                safe(() => window.aud.api().stop());
+            }))
+            api.append(elButton("TIME", () => {
+                let time = parseInt(prompt("time?"))
+                safe(() => window.aud.api().time(time));
+            }))
+            api.append(elButton("&lt;&lt;", () => {
+                safe(() => window.aud.api().audio().currentTime -= 5);
+            }))
+            api.append(elButton("&gt;&gt;", () => {
+                safe(() => window.aud.api().audio().currentTime += 5);
+            }))
+            api.append(elButton("FAV", () => {
+                let time = safe(() => dec(window.aud.api().pos()));
+                if (time) {
+                    listTimes.push(time);
+                    window.listRenderer.api.reload();
+                }
+            }))
+            api.append(elButton("RENDER", () => {
+                // RENDER here list of times
+                renderTimesToRenderer(listTimes);
+            }))
+            // Time status
+            let timePref = api.append(elPrefixed("time: ", ""))
+
+            // Timer which updates Time status
+            api.append(elTimer(100, () => {
+                if (!window.aud) return;
+                let time = safe(() => dec(window.aud.api().pos()));
+                timePref.setText(time + " sec")
+            })).start();
+        }))
+
+        // ===================
+        elto(document.body, el("hr"));
+
+        // RENDER the list of time labels
+        // ==============================
+        // [!] This is the order list
+        window.listRenderer = elto(document.body, elOrder(listTimes, (id, timeval) => {
+            return el("span", span => {
+
+                // Button to remove
+                elto(span, elButton("X", () => {
+                    listTimes.splice(id, 1);
+                    window.listRenderer.api.reload();
+                }))
+
+                // Button to play this position
+                elto(span, elButton(">", () => {
+                    safe(() => {
+                        window.aud.api().time(timeval);
+                        window.aud.api().play();
+                    })
+                }))
+                elto(span, elText("[" + timeval + "] Time label"));
+            });
+        }, e => {}))
+
+
+        // ==============
+        elto(document.body, el('hr'));
+
+        // Output text
+        // ==============
+        window.outputText = elto(document.body, el("textarea"))
+
+    })
+</script>
+
+</html>
