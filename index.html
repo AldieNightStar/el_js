@@ -14,6 +14,17 @@
 				// Main scene
 				main: api => {
 
+					let t = api.appendLn(elText("")).then(elStyle('font-size', '72px'));
+
+					let beatVal = true;
+					let beatSwitch = () => {
+						if (beatVal) {
+							t.setText("*#")
+						} else {
+							t.setText("#*")
+						}
+						beatVal = !beatVal
+					}
 					// LOGIC OF THE SCENE
 					api.append(elButtonR("click me", b => {
 						window.a = b.append(elAudio(a => {
@@ -22,7 +33,7 @@
 							a.play();
 							a.volume(0.2);
 							a.onEnd(() => console.log("END"))
-							a.onBeat(140, () => console.log("BEAT"))
+							a.onBeat(140, beatSwitch)
 						}));
 					}));
 					console.log(window.a);
