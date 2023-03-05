@@ -72,3 +72,15 @@ let t = elPrefixMultext(prefix, character, num)
 // Remultiply text. Change count of symbols
 t.setNum(10)
 ```
+
+
+
+
+
+
+### Div element
+```js
+// It's just an alias for: el('div', callback)
+// API the same as for el(...) elements
+let div = elDiv(callback)
+```

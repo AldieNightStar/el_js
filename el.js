@@ -668,3 +668,5 @@ function elFloating(elem, x, y) {
 		span.absolute = flag => span.style.position = flag ? "absolute" : "relative";
 	});
 }
+
+let elDiv = cb => el("div", cb);
