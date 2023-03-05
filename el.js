@@ -90,6 +90,9 @@ function elTimer(intervalMs, ontick) {
 					ontick(span);
 				}
 			}, intervalMs);
+			
+			// Return this timer (span element)
+			return span;
 		}
 
 		// API
