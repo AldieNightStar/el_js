@@ -15,9 +15,17 @@
 				main: api => {
 
 					// LOGIC OF THE SCENE
-					window.temp1 = api.append(
-						elFloating(elText("Hello there"), 100, 100)
-					)
+					api.append(elButtonR("click me", b => {
+						window.a = b.append(elAudio(a => {
+							a.src("test.mp3");
+							// a.loop(true);
+							a.play();
+							a.onSecond(0, () => a.volume(0.5))
+							a.onSecond(1, () => a.volume(0.2))
+							a.volume(0.2);
+							a.onEnd(() => console.log("END"))
+						}));
+					}));
 
 				}
 

@@ -6,7 +6,9 @@ function el(tag, cb) {
 	if (cb) cb(e);
 	// Additional GLOBAL el API
 	e.then = cb2 => { cb2(e); return e; }
-	e.delete = () => e.parentElement.removeChild(e);
+	e.delete = () => {
+		e.parentElement.removeChild(e)
+	};
 	return e;
 }
 
@@ -79,6 +81,9 @@ function elTimer(intervalMs, ontick) {
 		inum = setInterval(() => {
 			count += 1;
 			if (!span.isConnected) {
+				// Call onFree method when timer removing
+				if (span.onFree) span.onFree();
+				// Remove the timer
 				clearInterval(inum);
 			} else {
 				ontick(span);
@@ -674,3 +679,57 @@ function elFloating(elem, x, y) {
 }
 
 let elDiv = cb => el("div", cb);
+
+function elAudio(fn) {
+	let api = {};
+	return el('span', span => {
+
+		/** @type {Audio} */
+		let aud = elto(span, new Audio());
+
+		let secondEvents = [];
+		
+		// API setup
+		api.src = s => { aud.src = s; }
+		api.loop = flag => { aud.loop = flag; }
+		api.volume = v => { aud.volume = v; }
+		api.time = n => { aud.currentTime = n; }
+		api.play = aud.play.bind(aud);
+		api.pause = aud.pause.bind(aud);
+		api.stop = () => { api.pause(); api.time(0); }
+		api.onSecond = (sec, fn) => secondEvents.push([sec, fn]);
+		api.playing = () => !aud.paused;
+		api.audio = () => aud;
+		api.onEnd = f => { aud.onended = f; }
+
+		let dec = n => Math.floor(n * 10) / 10
+		
+		let timer = elto(span, elTimer(100, t => {
+			// Do nothing to paused audio
+			if (aud.paused) return;
+
+			// If len of secondEvents is 0 then do nothing
+			if (secondEvents.length < 1) return;
+
+			// Get onSecond evetns and do them
+			// s[0] - second number
+			// s[1] - function callback (no args)
+			// Will run each callback here
+			secondEvents
+				.filter(s => dec(s[0]) === dec(aud.currentTime))
+				.map(s => s[1])
+				.forEach(cb => cb())
+		}));
+		timer.api = () => api;
+		timer.onFree = () => {
+			// Free up the memory from Audio
+			api.stop();
+			aud.remove();
+		}
+
+		// Call
+		fn(api)
+
+		span.api = () => api;
+	});
+}

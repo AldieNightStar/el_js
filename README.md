@@ -27,6 +27,7 @@ curl https://raw.githubusercontent.com/AldieNightStar/el_js/master/el.js > el.js
 - [Storage stuff](docs/Storage.md)
 - [Event System](docs/Events.md)
 - [Animation stuff](docs/Animation.md)
+- [Audio stuff](docs/Audio.md)
 
 ### Core Element
 ```js

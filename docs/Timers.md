@@ -29,6 +29,11 @@ elTimer(500, t => {
     // Stop when ticks is more than 25
     if (t.count() > 25) t.stop()
 })
+
+// Set t.onFree to set callback in case timer will be removed
+t.onFree = () => {
+    // Do something
+}
 ```
 
 
