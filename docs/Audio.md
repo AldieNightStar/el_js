@@ -56,6 +56,9 @@ let aud = elAudio(a => {
     // DO NOT reuse it. Otherwise it could be breaked
     a.onBeat(bpm, callback)
 
+    // Get duration in seconds
+    a.duration()
+
     // When error throwed
     // You can catch it
     a.onErr(err => { /* ... */ })
