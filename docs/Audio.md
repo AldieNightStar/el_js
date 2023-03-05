@@ -55,6 +55,10 @@ let aud = elAudio(a => {
     // When paused/stopped - it will not call
     // DO NOT reuse it. Otherwise it could be breaked
     a.onBeat(bpm, callback)
+
+    // When error throwed
+    // You can catch it
+    a.onErr(err => { /* ... */ })
 });
 
 // To use that API again just call:

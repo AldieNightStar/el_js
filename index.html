@@ -32,13 +32,11 @@
 							a.loop(true);
 							a.play();
 							a.volume(0.2);
-							a.onEnd(() => console.log("END"))
 							a.onBeat(140, beatSwitch)
 						}));
 					}));
-					console.log(window.a);
 					api.append(elButton("Pause", () => window.a.api().pause()));
-					api.append(elButton("Play",  () => window.a.api().play() ));
+					api.append(elButton("Play", () => window.a.api().play()));
 
 				}
 

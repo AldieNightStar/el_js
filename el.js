@@ -689,6 +689,7 @@ function elAudio(fn) {
 
 		let secondEvents = [];
 		let onBeat = null;
+		let onErr = null;
 		
 		// API setup
 		api.src = s => { aud.src = s; }
@@ -702,6 +703,7 @@ function elAudio(fn) {
 		api.playing = () => !aud.paused;
 		api.audio = () => aud;
 		api.onEnd = f => { aud.onended = f; }
+		api.onErr = f => { onErr = f; }
 		api.onBeat = (bpm, f) => {
 			// Get beats per second
 			let bps = (bpm / 60)
@@ -745,7 +747,7 @@ function elAudio(fn) {
 		}
 
 		// Call
-		fn(api)
+		try { fn(api) } catch (e) { if (onErr) onErr(e); }
 
 		// onBeat callback setup
 		if (onBeat) {
