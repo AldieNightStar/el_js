@@ -11,38 +11,22 @@
 // Allows to create animations on the fly
 // Runs while it's connected to DOM
 let ani = elAnimation(ani => {
-    // Create animation timeline
-    // Receives:
-    //     frames    - maximum frames in the new line
-    //     callback  - callback for new line API
+    // New time line
+    // frames - count of frames
     ani.newLine(frames, line => {
         // Add interpolation (tween-like) animation. Between frames
-        //     from_frame, to_frame      - used to indicate range in frames (from->to)
-        //     from_val,   to_val        - used to specify numbers to interpolate between frames
-        //     callback(frame, value)    - Callback
-        //         frame                 - Current frame
-        //         value                 - Value to be used (Interpolation result)
-        line.addInterpol(from_frame, to_frame, from_val, to_val, (frame, value) => {
-            // You can set position of some element according to 'value' result
-            // For example:
-            flying_head.style.top = value + ".px";
-        });
+        line.addInterpol(
+            from_frame, to_frame,                // frame from-to
+            from_val, to_val,                    // values from-to
+            (frame, value) => updateVal(value)); // callback to assign effect
 
-        // Use interpolation builder
-        // line has method `with` which calls that builder
-        // Check out "Animation Interpol Builder" documentation below
+        // Use interpolation builder:   line.with(callback) ...
         line.with((x, y, z) => {})
             .on(1, 10).from(1, 2, 3).to(10, 20, 30).animate()
             .next(10).to(100, 200, 300).animate()
             .next(10).to(1000, 2000, 3000).animate()
 
-        // addInterpol example:
-        //   Let's imagine we want to add 1 to 10 frames as interpolation from 100 to 200
-        //   This way we will change position of the player from 100 to 200 during 1 to 10 frames
-        line.addInterpol(1, 10, 100, 200, (frame, xpos) => player.pos.x = xpos);
-
         // Also we can add function for specific frame
-        // First argument
         line.addFunction(frame, () => console.log("It's the X frame"))
     })
 
@@ -64,9 +48,8 @@ let ani = elAnimation(ani => {
     // Set animation to be repeating
     ani.repeat(true)
 
-    // Set how much time ALL the animation will go
-    // It will automatically calculate time per each frame
-    ani.time(3000)
+    // Set time for single frame in milliseconds (Default: 50)
+    ani.time(100)
 
     // Use existing line (ElAnimationLine)
     //   instead of:   ani.newLine(...)

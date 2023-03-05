@@ -377,9 +377,7 @@ function elEvent() {
 
 function elNamedScenes(nameVariable, scenesObj) {
 	return elScene(api => {
-		if (nameVariable.isNull()) {
-			nameVariable.set("main");
-		}
+		nameVariable.inital("main");
 		api.reload = () => {
 			api.clear();
 			let name = nameVariable.get();
@@ -554,7 +552,6 @@ class ElAnimationPlayer {
 	}
 }
 
-
 // Crate Timer element with animation features
 // Receives:
 //     fn - callback function with animation API
@@ -564,15 +561,14 @@ function elAnimation(fn) {
 	let onEnd = () => {};
 	let doRepeat = false;
 	let startingFrame = 1;
-	let animationTime = null;
-	let animationPerFrame = 0; // Time per each frame
+	let animationPerFrame = 50; // Default: 20 FPS
 	let line = null;
 
 	// API
 	api.repeat = flag => doRepeat = flag;
 	api.onEnd = cb => onEnd = cb;
 	api.frame = n => startingFrame = n;
-	api.time = ms => animationTime = ms;
+	api.time = ms => animationPerFrame = ms;
 	api.fromLine = (l) => line = l;
 	api.newLine = (frames, cb) => {
 		let newLine = new ElAnimationLine(frames);
@@ -589,15 +585,6 @@ function elAnimation(fn) {
 		// Fallback timer
 		return elTimer(100, t => t.stop());
 	}
-
-	if (animationTime === null) {
-		console.error("elAnimation:", ".time(...) is not set. Animation will not execute")
-		// Fallback timer
-		return elTimer(100, t => t.stop());
-	}
-
-	// Count time in ms for each frame
-	animationPerFrame = animationTime / line.framesCount
 
 	// Bootstraping player
 	/** @type {ElAnimationPlayer} */
