@@ -59,6 +59,9 @@ let aud = elAudio(a => {
     // Get duration in seconds
     a.duration()
 
+    // Will return current seconds (Position) in audio
+    a.pos()
+
     // When error throwed
     // You can catch it
     a.onErr(err => { /* ... */ })

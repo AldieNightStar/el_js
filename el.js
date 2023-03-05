@@ -710,6 +710,7 @@ function elAudio(fn) {
 		api.onEnd = f => { aud.onended = f; }
 		api.onErr = f => { onErr = f; }
 		api.duration = () => aud.duration;
+		api.pos = () => aud.currentTime;
 
 		// Make 1.234 number looks like 1.2
 		let dec = n => Math.floor(n * 10) / 10
