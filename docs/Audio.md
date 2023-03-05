@@ -52,6 +52,7 @@ let aud = elAudio(a => {
     // Callbacks for Beats
     // Every beat will be called
     //   bpm - beats per minute
+    // When paused/stopped - it will not call
     a.onBeat(bpm, callback)
 });
 
