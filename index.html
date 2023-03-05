@@ -32,7 +32,11 @@
 							a.loop(true);
 							a.play();
 							a.volume(0.2);
-							a.onBeat(140, beatSwitch)
+							// a.onBeat(280, beatSwitch) // was bpm: 140
+							for (let i = 0; i < 1000; i++) {
+								let id = i;
+								a.onSecond(i/10, () => console.log("Second: ", id/10))
+							}
 						}));
 					}));
 					api.append(elButton("Pause", () => window.a.api().pause()));

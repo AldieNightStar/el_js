@@ -90,14 +90,14 @@ function elTimer(intervalMs, ontick) {
 					ontick(span);
 				}
 			}, intervalMs);
-			
+
 			// Return this timer (span element)
 			return span;
 		}
 
 		// API
 		span.count = () => count;
-		
+
 		span.stop = () => {
 			clearInterval(inum);
 			span.remove(); // Remove itself
@@ -720,7 +720,8 @@ function elAudio(fn) {
 		api.pos = () => aud.currentTime;
 
 		// Make 1.234 number looks like 1.2
-		let dec = n => Math.floor(n * 10) / 10
+		// (num + Number.EPSILON) * 100) / 100
+		let dec = n => Math.trunc(n * 10) / 10
 
 		// This function will build beats using adding callbacks each n seconds
 		api.onBeat = (bpm, f) => {
@@ -743,6 +744,20 @@ function elAudio(fn) {
 			};
 		}
 
+		// Difference between the seconds counter values
+		// If it will be too big (> 0.1) then we will run missed events
+		let previousSecondsTime = 0.1;
+
+		// Get onSecond events and execute them
+		// s[0] - second number
+		// s[1] - function callback (no args)
+		// Will run each callback here
+		let executeBetween = (fromSec, toSec) => secondEvents
+			.filter(s => dec(s[0]) >= fromSec && dec(s[0]) <= toSec)
+			.map(s => s[1])
+			.forEach(cb => cb());
+
+		// Timer which processes second events
 		let timer = elto(span, elTimer(100, t => {
 			// Do nothing to paused audio
 			if (aud.paused) return;
@@ -750,14 +765,26 @@ function elAudio(fn) {
 			// If len of secondEvents is 0 then do nothing
 			if (secondEvents.length < 1) return;
 
-			// Get onSecond evetns and do them
-			// s[0] - second number
-			// s[1] - function callback (no args)
-			// Will run each callback here
-			secondEvents
-				.filter(s => dec(s[0]) === dec(aud.currentTime))
-				.map(s => s[1])
-				.forEach(cb => cb())
+			// Calculate differences between before-time and after
+			// If it too big then we missing couple events
+			let differenceBetweenLast = dec(aud.currentTime - previousSecondsTime)
+			if (differenceBetweenLast > 0.1) {
+				// When there is difference, then we should not forget anything
+				let prev = dec(aud.currentTime - differenceBetweenLast + 0.1)
+				let now = dec(aud.currentTime);
+				executeBetween(prev, now);
+			} else if (differenceBetweenLast == 0) {
+				// When difference between past is zero (Twice), then we do nothing here
+				// We don't need to repeat stuff twice
+			} else {
+				// Execute events in current time
+				executeBetween(dec(aud.currentTime), dec(aud.currentTime));
+			}
+
+			// Update previousSecondsTime variable for the future analyses
+			previousSecondsTime = dec(aud.currentTime);
+
+
 		}).start());
 		timer.api = () => api;
 		timer.onFree = () => {
