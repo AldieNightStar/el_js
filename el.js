@@ -647,8 +647,7 @@ function elFloating(elem, x, y) {
 				line.with(val => span.style.top = val + "px")
 					.on(5, 10).from(y).to(y + 15).animate()
 					.next(5).animate()
-					.next(5).to(y).animate()
-					.next(5).animate();
+					.next(5).to(y).animate();
 			})
 			api.time(50)
 			api.repeat(true);
