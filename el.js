@@ -455,17 +455,22 @@ class ElInterpolBuilder {
 // Then it will be used in ElAnimationPlayer for playing
 class ElAnimationLine {
 	// Create animation line and specify how much frames will it have
-	constructor(frames) {
+	constructor() {
 		// List of [frame, func]
 		this.line = [];
-		this.framesCount = frames;
+		this.framesCount = 1;
+	}
+
+	// Checks frame number with max frames
+	// If current number is bigger then adjusts "this.framesCount"
+	_adjustFrameCount(frameNumber) {
+		if (this.framesCount < frameNumber) this.framesCount = frameNumber;
 	}
 
 	// Add simple function call on frame arrive
 	// Function will not receive anything
 	addFunction(frame, func) {
-		// Do nothing if it's out of frames
-		if (frame > this.framesCount) return;
+		this._adjustFrameCount(frame);
 
 		this.line.push([frame, func]);
 	}
@@ -480,8 +485,7 @@ class ElAnimationLine {
 	//         frame - frame which is currently playing
 	//         value - interpolation value to be set (number)
 	addInterpol(frame, endFrame, fromVal, toVal, func) {
-		// Do nothing if it's out of frames
-		if (frame > this.framesCount) return;
+		this._adjustFrameCount(endFrame);
 
 		// Generate interpolation stuff
 		let count = endFrame - frame;
@@ -574,8 +578,8 @@ function elAnimation(fn, debug) {
 	api.frame = n => startingFrame = n;
 	api.time = ms => animationPerFrame = ms;
 	api.fromLine = (l) => line = l;
-	api.newLine = (frames, cb) => {
-		let newLine = new ElAnimationLine(frames);
+	api.newLine = (cb) => {
+		let newLine = new ElAnimationLine();
 		cb(newLine)
 		line = newLine;
 		return newLine;
@@ -643,7 +647,7 @@ function elFloating(elem, x, y) {
 		elto(span, elem);
 
 		let newAni = () => elAnimation(api => {
-			api.newLine(20, line => {
+			api.newLine(line => {
 				line.with(val => span.style.top = val + "px")
 					.on(5, 10).from(y).to(y + 15).animate()
 					.next(5).animate()

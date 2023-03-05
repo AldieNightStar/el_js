@@ -12,8 +12,7 @@
 // Runs while it's connected to DOM
 let ani = elAnimation(ani => {
     // New time line
-    // frames - count of frames
-    ani.newLine(frames, line => {
+    ani.newLine(line => {
         // Add interpolation (tween-like) animation. Between frames
         line.addInterpol(
             from_frame, to_frame,                // frame from-to
@@ -86,8 +85,7 @@ elAnimation(api => { /* ... */ }, true)
 * Can be used to prepare some animations
 ```js
 // Create new Animation line
-// frames  - frame count
-let line = new ElAnimationLine(frames);
+let line = new ElAnimationLine();
 
 // Add interpolation animation (Between frame)
 line.addInterpol(from_frame, to_frame, from_val, to_val, (frame, val) => { /* ... */ })
