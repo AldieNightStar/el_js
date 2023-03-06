@@ -335,11 +335,13 @@ class ElVariable {
 	constructor(getter, setter) {
 		this.getter = getter;
 		this.setter = setter;
+		this.__event = null;
 	}
 	get() {
 		return this.getter();
 	}
 	set(val) {
+		if (this.__event) this.__event.emit(val);
 		return this.setter(val)
 	}
 	isNull() {
@@ -349,6 +351,10 @@ class ElVariable {
 	inital(val) {
 		if (this.isNull()) this.set(val);
 		return this.get();
+	}
+	event() {
+		if (!this.__event) this.__event = elEvent();
+		return this.__event;
 	}
 }
 

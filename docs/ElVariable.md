@@ -22,6 +22,12 @@ v.isNull();
 
 // If variable is null then default 'val' will be set
 v.inital(val);
+
+// Get variable setter event
+// Event will emit on every value set
+// LAZY: Will not be created until first call
+// Sample:      v.event().connect(newValue => { ... })
+v.event();
 ```
 
 ### Wrapping / Unwrapping / Checking
