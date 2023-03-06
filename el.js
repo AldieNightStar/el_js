@@ -352,6 +352,27 @@ class ElVariable {
 	}
 }
 
+// will wrap variable to ElVariable
+// If value is already an ElVariable then it will return as is
+ElVariable.wrap = function(v) {
+	if (v instanceof ElVariable) return v;
+	// Set variable to local scope
+	let val = v;
+	return new ElVariable(() => val, n  => { val = n; });
+}
+
+// will unwrap ElVariable and return it's value
+// If value is NOT ElVariable then it will be returned as is
+ElVariable.unwrap = function(v) {
+	if (v instanceof ElVariable) return v.get();
+	return v;
+}
+
+// Returns true if it's ElVariable
+ElVariable.isVariable = function(v) {
+	return (v instanceof ElVariable);
+}
+
 function elStorage(section, provider) {
 	if (provider === undefined) provider = () => sessionStorage;
 	let el = {};
