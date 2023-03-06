@@ -1,6 +1,6 @@
 # ElVariable
 
-* Used to create Varaibles for the elements
+* Used to create Variables for the elements
 * Could be created from scratch
 * Could be taken from `elStorage` element
 
