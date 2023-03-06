@@ -360,22 +360,22 @@ class ElVariable {
 
 // will wrap variable to ElVariable
 // If value is already an ElVariable then it will return as is
-ElVariable.wrap = function(v) {
+ElVariable.wrap = function (v) {
 	if (v instanceof ElVariable) return v;
 	// Set variable to local scope
 	let val = v;
-	return new ElVariable(() => val, n  => { val = n; });
+	return new ElVariable(() => val, n => { val = n; });
 }
 
 // will unwrap ElVariable and return it's value
 // If value is NOT ElVariable then it will be returned as is
-ElVariable.unwrap = function(v) {
+ElVariable.unwrap = function (v) {
 	if (v instanceof ElVariable) return v.get();
 	return v;
 }
 
 // Returns true if it's ElVariable
-ElVariable.isVariable = function(v) {
+ElVariable.isVariable = function (v) {
 	return (v instanceof ElVariable);
 }
 
@@ -413,7 +413,7 @@ function elEvent() {
 	// Will create Promise which connects to the event
 	// On event emit it will call the Promise's ok(dat) function
 	// Returns false (To kill event connection after that)
-	el.wait  = () => new Promise(ok => el.connect(dat => { ok(dat); return false; }));
+	el.wait = () => new Promise(ok => el.connect(dat => { ok(dat); return false; }));
 	return el;
 }
 
@@ -620,12 +620,7 @@ function elAnimation(fn, debug) {
 	api.frame = n => startingFrame = n;
 	api.time = ms => animationPerFrame = ms;
 	api.fromLine = (l) => line = l;
-	api.newLine = (cb) => {
-		let newLine = new ElAnimationLine();
-		cb(newLine)
-		line = newLine;
-		return newLine;
-	}
+	api.newLine = () => { let newLn = new ElAnimationLine(); line = newLn; return newLn; };
 
 	// Call API func
 	fn(api);
@@ -690,13 +685,11 @@ function elFloating(elem, x, y) {
 		elto(span, elem);
 
 		let newAni = () => elAnimation(api => {
-			api.newLine(line => {
-				line.with(val => span.style.top = val + "px")
-					.on(5, 10).from(y).to(y + 15).animate()
-					.next(5).animate()
-					.next(5).to(y).animate();
-			})
-			api.time(50)
+			api.newLine().with(val => span.style.top = val + "px")
+				.on(5, 10).from(y).to(y + 15).animate()
+				.next(5).animate() // Wait 5 frames
+				.next(5).to(y).animate(); // Move back
+			api.time(50);
 			api.repeat(true);
 		});
 
