@@ -5,6 +5,11 @@
 
 ---
 
+- [Floating Element](animation/FloatingElement.md)
+- [ElAnimationLine (Animation TimeLine)](ElAnimationLine.md)
+
+---
+
 ### Animation Element
 * Uses [ElAnimationLine](ElAnimationLine.md) for animation
 * Animation is NOT reusable. After it ends (for non-repeating one) - it will be deleted from DOM
@@ -13,7 +18,7 @@
 // Returns timer with animation executor
 // Allows to create animations on the fly
 // Runs while it's connected to DOM
-let ani = elAnimation(ani => {
+let timer = elAnimation(ani => {
     // Create new timeline (ElAnimationLine)
     // REQUIRED to be called (Alternative: ani.setLine(...))
     // Check "ElAnimationLine" documentation for details on how to use
@@ -45,11 +50,14 @@ let ani = elAnimation(ani => {
     ani.fromLine(other_line)
 });
 
-// Set animation to be paused
-ani.paused(true)
+// Set timer to be paused
+// false - to unpause
+//
+// Please DON'T use stop() to pause
+timer.paused(true)
 
 // Get frame count in the animation
-ani.frames();
+timer.frames();
 
 // Get position of the player. Current frame number
 timer.getFrame()
@@ -60,48 +68,15 @@ timer.setFrame(id)
 // Terminate all the animation and Timer
 // Will also remove the 'span' it creates
 // DO NOT use it after that command. It will be removed from DOM
-ani.stop();
+timer.stop();
 
 // DEBUG Animation
 // ====================
 // Add true to the end. It will make animation in DEBUG mode
+//
+// Debug mode will NOT create TIMER but rather couple of buttons to control the animation
 elAnimation(api => { /* ... */ }, true)
 ```
 
 
 
-
-
-
-
-### Floating Element
-```js
-// Creates floating element from element provided
-// Uses relative position. To make absolute:    f.absolute(true)
-// Will create different span in which your element will be put
-// x, y    - it's a coordinates in pixels
-let f = elFloating(elem, x, y)
-
-// Set new position for the floating element
-f.setPos(x, y)
-
-// Get position of the floating element
-// Will return something like: {x: 100, y: 200}
-f.getPos();
-
-// Delete the floating element
-// Will be deleted from DOM
-// DO NOT USE it after this call
-f.delete();
-
-// Stop the floating
-// true  - makes it floating again
-f.floating(false)
-
-// Get's element from the inside
-f.elem()
-
-// Makes element of absolute position
-// false  - make it relative position
-f.absolute(true)
-```
