@@ -25,6 +25,7 @@ curl https://raw.githubusercontent.com/AldieNightStar/el_js/master/el.js > el.js
 - [Scene related stuff](docs/Scenes.md)
 - [Timers etc](docs/Timers.md)
 - [Storage stuff](docs/Storage.md)
+- [ElVariable (Variable)](docs/ElVariable.md)
 - [Event System](docs/Events.md)
 - [Animation stuff](docs/Animation.md)
 - [Audio stuff](docs/Audio.md)
