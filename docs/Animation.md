@@ -19,6 +19,10 @@ let timer = elAnimation(ani => {
     // Check "ElAnimationLine" documentation for details on how to use
     let line = ani.newLine();
 
+    // Set animation to NOT start (Pause on start)
+    // To unpause - call:    timer.paused(false)
+    ani.paused();
+
     // Starting frame. We can specify start-point frame (Default: 1)
     ani.frame(10);
 
@@ -51,6 +55,9 @@ let timer = elAnimation(ani => {
 // Please DON'T use stop() to pause
 timer.paused(true)
 
+// Returns true if animation is currently paused
+timer.isPaused();
+
 // Get frame count in the animation
 timer.frames();
 
@@ -64,13 +71,6 @@ timer.setFrame(id)
 // Will also remove the 'span' it creates
 // DO NOT use it after that command. It will be removed from DOM
 timer.stop();
-
-// DEBUG Animation
-// ====================
-// Add true to the end. It will make animation in DEBUG mode
-//
-// Debug mode will NOT create TIMER but rather couple of buttons to control the animation
-elAnimation(api => { /* ... */ }, true)
 ```
 
 

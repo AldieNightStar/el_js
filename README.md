@@ -22,13 +22,13 @@ curl https://raw.githubusercontent.com/AldieNightStar/el_js/master/el.js > el.js
 
 - [Basic Elements](docs/Basic.md)
 - [Interactive Elements](docs/Interactive.md)
-- [Scene related stuff](docs/Scenes.md)
 - [Timers etc](docs/Timers.md)
-- [Storage stuff](docs/Storage.md)
-- [ElVariable (Variable)](docs/ElVariable.md)
-- [Event System](docs/Events.md)
-- [Animation elements](docs/Animation.md)
-- [Audio stuff](docs/Audio.md)
+- [Animation](docs/Animation.md)
+- [Scenes](docs/Scenes.md)
+- [Storage](docs/Storage.md)
+- [ElVariable](docs/ElVariable.md)
+- [Events](docs/Events.md)
+- [Audio](docs/Audio.md)
 
 ### Core Element
 ```js

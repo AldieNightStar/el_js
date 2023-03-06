@@ -633,7 +633,7 @@ class ElAnimationPlayer {
 // Crate Timer element with animation features
 // Receives:
 //     fn - callback function with animation API
-function elAnimation(fn, debug) {
+function elAnimation(fn) {
 	let api = {};
 
 	let onEnd = () => { };
@@ -641,6 +641,7 @@ function elAnimation(fn, debug) {
 	let startingFrame = 1;
 	let animationPerFrame = 50; // Default: 20 FPS
 	let line = null;
+	let doStartPaused = false;
 
 	// API
 	api.repeat = flag => doRepeat = flag;
@@ -649,6 +650,7 @@ function elAnimation(fn, debug) {
 	api.time = ms => animationPerFrame = ms;
 	api.fromLine = (l) => line = l;
 	api.newLine = () => { let newLn = new ElAnimationLine(); line = newLn; return newLn; };
+	api.paused = () => { doStartPaused = true; }
 
 	// Call API func
 	fn(api);
@@ -662,21 +664,12 @@ function elAnimation(fn, debug) {
 	// Bootstraping player
 	/** @type {ElAnimationPlayer} */
 	let player = new ElAnimationPlayer(line, doRepeat, p => { if (onEnd) onEnd(p); });
-	player.pos = startingFrame;
+	
+	// If we want to start paused
+	if (doStartPaused) player.paused = true;
 
-	// DEBUG mode
-	if (debug === true) {
-		return elScene(sceneApi => {
-			let t = sceneApi.appendLn(elText("A[]"));
-			let upd = () => { t.setText("A[" + player.pos + "/" + player.line.framesCount + "]"); }
-			upd();
-			let rev = () => { player.pos -= 2; if (player.pos < 0) { player.pos = 0; }; player.step(); upd(); }
-			let next = () => { player.step(); upd(); }
-			sceneApi.append(elButton("&lt;A", rev))
-			sceneApi.append(t);
-			sceneApi.appendLn(elButton("A&gt;", next))
-		})
-	}
+	// Set starting frame
+	player.pos = startingFrame;
 
 	// Will execute in timer on current DOM element it returns
 	// Timer will immediately start
@@ -689,6 +682,7 @@ function elAnimation(fn, debug) {
 	timer.frames = () => player.line.framesCount
 	timer.getFrame = () => player.pos
 	timer.setFrame = n => { player.pos = n; }
+	timer.isPaused = () => player.paused;
 
 	return timer;
 }
