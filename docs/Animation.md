@@ -1,10 +1,5 @@
 # Animation stuff
 
-* Here are some Animation components
-* Used to create interactive elements or Novels
-
----
-
 - [Floating Element](animation/FloatingElement.md)
 - [ElAnimationLine (Animation TimeLine)](ElAnimationLine.md)
 
