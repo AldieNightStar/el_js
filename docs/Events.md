@@ -25,4 +25,7 @@ evt.emit("Hello");
 
 // Clear the events
 evt.clear();
+
+// Waits for the emit and returns emit data
+await evt.wait()
 ```

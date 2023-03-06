@@ -410,6 +410,10 @@ function elEvent() {
 		funcs = funcs.filter(f => f(dat))
 	}
 	el.clear = funcs = [];
+	// Will create Promise which connects to the event
+	// On event emit it will call the Promise's ok(dat) function
+	// Returns false (To kill event connection after that)
+	el.wait  = () => new Promise(ok => el.connect(dat => { ok(dat); return false; }));
 	return el;
 }
 
