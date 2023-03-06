@@ -30,6 +30,8 @@ t.count()
 t.pause(true)
 
 // Stops the timer
+// Will also remove it from DOM
+// Do NOT use it after this call
 t.stop()
 
 // Sample
