@@ -24,6 +24,11 @@ t.start()
 // Retunrs how many ticks were happen
 t.count()
 
+// Set timer to be paused
+// Will not call callbacks during pause
+// To unpase:   t.pause(false)
+t.pause(true)
+
 // Stops the timer
 t.stop()
 
@@ -33,10 +38,21 @@ elTimer(500, t => {
     if (t.count() > 25) t.stop()
 })
 
-// Set t.onFree to set callback in case timer will be removed
+// Set t.onFree to set callback in case timer will be stopped and removed
 t.onFree = () => {
     // Do something
 }
+
+// Set live controller for the timer
+// By default it checks that element is not deleted from DOM
+// If callback returns true - then timer lives
+// If callback returns false - then timer will die (Don't use timer after dead)
+//
+// Be careful with this
+t.liveWhile(callback)
+
+// Returns true if Timer is "dead"
+t.dead();
 ```
 
 

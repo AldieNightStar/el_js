@@ -7,6 +7,8 @@
 
 ### Animation Element
 * Uses [ElAnimationLine](ElAnimationLine.md) for animation
+* Animation is NOT reusable. After it ends (for non-repeating one) - it will be deleted from DOM
+* To make animation play again - create new one and add it to DOM
 ```js
 // Returns timer with animation executor
 // Allows to create animations on the fly

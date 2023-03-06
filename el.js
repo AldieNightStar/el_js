@@ -76,18 +76,39 @@ function elTimer(intervalMs, ontick) {
 	return el("span", span => {
 		let count = 0;
 		let inum = 0;
+		let isDead = false;
+
+		// Living Function callback
+		// If returns false - then timer will be destroyed
+		let livingFunc = () => span.isConnected
+
+		// Timer is paused or not
+		// If true then timer will execute but will never call the ontick function
+		let paused = false;
 
 		// Interval
 		span.start = () => {
+			// Make sure we are not paused here
+			paused = false;
+
+			// Reassign span.start to not make it use again
+			span.start = () => {};
+
+			// Start timers
 			inum = setInterval(() => {
-				count += 1;
-				if (!span.isConnected) {
+				if (!livingFunc()) {
 					// Call onFree method when timer removing
 					if (span.onFree) span.onFree();
 					// Remove the timer
 					clearInterval(inum);
+					// Set timer to be dead
+					isDead = true;
 				} else {
-					ontick(span);
+					// If not paused also
+					if (!paused) {
+						count += 1;
+						ontick(span);
+					}
 				}
 			}, intervalMs);
 
@@ -99,9 +120,15 @@ function elTimer(intervalMs, ontick) {
 		span.count = () => count;
 
 		span.stop = () => {
+			// Do nothing if it already dead
+			if (isDead) return;
+			// Clear the timers
 			clearInterval(inum);
 			span.remove(); // Remove itself
 		}
+		span.pause = flag => { paused = flag; }
+		span.liveWhile = (cb) => { livingFunc = cb }
+		span.dead = () => isDead;
 	})
 }
 
