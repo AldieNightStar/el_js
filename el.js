@@ -125,6 +125,7 @@ function elTimer(intervalMs, ontick) {
 			// Clear the timers
 			clearInterval(inum);
 			span.remove(); // Remove itself
+			isDead = true; // Mark it dead
 		}
 		span.pause = flag => { paused = flag; }
 		span.liveWhile = (cb) => { livingFunc = cb }
