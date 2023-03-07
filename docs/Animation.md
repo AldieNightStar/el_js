@@ -28,11 +28,19 @@ let timer = elAnimation(ani => {
 
     // Will execute when animation will end up
     // Works even with repeatable animations
-    ani.onEnd(p => {
+    ani.onEnd(player => {
         // p - is player itself
 
-        // Get ended frame number
-        p.pos
+        // Current frame (from 1 to last one)
+        player.pos
+
+        // Set to be pause
+        // false - to unpause
+        player.paused = true
+
+        // Set animation to be ended
+        // Destroys animation/player/DOM element (DO NOT USE after that)
+        player.ended = true
 
         // Example of using 'p.pos'
         console.log("Done on " + p.pos + " frame")

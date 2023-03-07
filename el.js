@@ -665,7 +665,7 @@ function elAnimation(fn) {
 
 	// Bootstraping player
 	/** @type {ElAnimationPlayer} */
-	let player = new ElAnimationPlayer(line, doRepeat, p => { if (onEnd) onEnd(p); });
+	let player = new ElAnimationPlayer(line, doRepeat, p => { onEnd(p); });
 	
 	// If we want to start paused
 	if (doStartPaused) player.paused = true;
