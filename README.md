@@ -54,5 +54,8 @@ e.delete();
 
 // Add element to "document.body"
 elto(document.body, e);
+
+// Alternatively we could use span instead of: el("span", callback)
+let span = elSpan(callback);
 ```
 
