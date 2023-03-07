@@ -62,7 +62,7 @@ function elButtonR(caption, sceneFn) {
 }
 
 function elText(text, cb) {
-	return el("span", t => {
+	return elSpan(t => {
 		t.innerHTML = text;
 		if (cb) cb(t);
 		// API
@@ -73,7 +73,7 @@ function elText(text, cb) {
 }
 
 function elTimer(intervalMs, ontick) {
-	return el("span", span => {
+	return elSpan(span => {
 		let count = 0;
 		let inum = 0;
 		let isDead = false;
@@ -141,7 +141,7 @@ function elTimerOnce(intervalMs, ontimer) {
 }
 
 function elPrefixed(prefixText, t) {
-	return el("span", e => {
+	return elSpan(e => {
 		// API
 		// set number
 		e.setText = (n) => e.innerHTML = prefixText + n
@@ -159,7 +159,7 @@ function elPrefixMultext(prefix, character, num) {
 		}
 		return s;
 	}
-	return el("span", e => {
+	return elSpan(e => {
 		// API
 		// set number
 		e.setNum = (n) => e.innerText = prefix + mul(character, n)
@@ -170,7 +170,7 @@ function elPrefixMultext(prefix, character, num) {
 }
 
 function elScene(fn) {
-	return el("span", sceneSpan => {
+	return elSpan(sceneSpan => {
 		// API
 		let api = {};
 
@@ -298,7 +298,7 @@ function elOrder(values, renderer, cb) {
 	}
 	let list = elList(
 		values,
-		(id, val) => el("span", span => { // custom renderer that support ordering
+		(id, val) => elSpan(span => { // custom renderer that support ordering
 			// When button is pressed and order is changed we can update list by .api.reload()
 			if (id !== 0) {
 				elto(span, elButton("^", () => {
@@ -688,7 +688,7 @@ function elAnimation(fn) {
 }
 
 function elFloating(elem, x, y) {
-	return el('span', span => {
+	return elSpan(span => {
 		// Set up the style properties
 		span.style.position = "relative";
 		span.style.left = x + "px";
@@ -735,7 +735,7 @@ let elDiv = cb => el("div", cb);
 
 function elAudio(fn) {
 	let api = {};
-	return el('span', span => {
+	return elSpan(span => {
 
 		/** @type {Audio} */
 		let aud = elto(span, new Audio());
