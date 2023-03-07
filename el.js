@@ -12,6 +12,8 @@ function el(tag, cb) {
 	return e;
 }
 
+function elSpan(cb) { return el("span", cb); }
+
 const elNext = () => el("br");
 
 // ==========================
